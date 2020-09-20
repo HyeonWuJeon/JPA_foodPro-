@@ -1,0 +1,52 @@
+spring:
+  profiles:
+    active: dev
+  session:
+    store-type: jdbc
+  datasource:
+    platform: h2
+    data: classpath*:db/${platform}/data.sql
+    url: jdbc:h2:tcp://localhost/~/foodPro
+    username: sa
+    password: 1234
+    driver-class-name: org.h2.Driver
+    initialization-mode: never
+    sql-script-encoding: UTF-8
+    data-username:
+  jpa:
+    database-platform: H2
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+      format_sql: true
+  mvc:
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/
+    add-mappings: true
+  output:
+    ansi:
+      enabled: always
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+  thymeleaf:
+    cache: false
+
+
+
+
+#Logging
+logging:
+  config: classpath:logbacks-${spring.profiles.active}.xml
+  level:
+    org:
+      springframework:
+        web: info
+        boot: info
+    com:
+      foodPro: info
