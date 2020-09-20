@@ -3,7 +3,7 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <!-- 로그 저장 경로 -->
-    <property name="LOGS_ABSOLUTE_PATH" value="D:\\logs\\dev"/>
+    <property name="LOGS_ABSOLUTE_PATH" value="H:\workspace\my_project\web\JPA@foodPro\logDev"/>
 
     <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <prudent>true</prudent>
@@ -48,7 +48,7 @@
 
 
     <!--    <logger name="org.springframework.web" level="INFO"/>-->
-    <logger name="com.kiwontech.hospital" level="INFO">d
+    <logger name="com.kiwontech.hospital" level="INFO">
         <appender-ref ref="dailyRollingFileAppender" />
     </logger>
     <!--<logger name="org.springframework.security" level="DEBUG"/>-->
