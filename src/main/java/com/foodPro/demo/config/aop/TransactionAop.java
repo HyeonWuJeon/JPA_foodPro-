@@ -29,7 +29,7 @@ public class TransactionAop {
         RuleBasedTransactionAttribute transactionAttribute = new RuleBasedTransactionAttribute();
         transactionAttribute.setRollbackRules(rollbackRules);           // LINE :: 트랜잭션 롤백 규칙 설정
         transactionAttribute.setName("*");                              // LINE :: 트랜잭션 이름
-        transactionAttribute.setIsolationLevelName("default");          // LINE :: 격리 규칙
+        transactionAttribute.setIsolationLevelName("ISOLATION_DEFAULT");          // LINE :: 격리 규칙
         transactionAttribute.setPropagationBehaviorName("PROPAGATION_REQUIRES_NEW"); // LINE :: 전파지연
 
         MatchAlwaysTransactionAttributeSource attributeSource = new MatchAlwaysTransactionAttributeSource();
