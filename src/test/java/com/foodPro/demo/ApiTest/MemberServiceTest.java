@@ -1,6 +1,7 @@
 package com.foodPro.demo.ApiTest;
 
 
+import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberService;
@@ -42,10 +43,17 @@ public class MemberServiceTest {
         String zipcode = "330";
         String street = "용마산로";
 
-        MemberDto.Request request = new MemberDto.Request(name, pwd, email, birth, phone, city, street,zipcode);
-
         //when
-        memberService.SignUp(request);
+        memberService.SignUp(MemberDto.Request.builder()
+                .address(new Address(city, zipcode, street))
+                .email(email)
+                .name(name)
+                .birth(birth)
+                .city(city)
+                .pwd(phone)
+                .street(street)
+                .phone(phone)
+                .build());
 
         //then
         assertThat(em.find(Member.class, 1L).getName()).isEqualTo(name);
