@@ -2,15 +2,16 @@ package com.foodPro.demo.config.common;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
-@Embeddable //H2 디비
+@Embeddable
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Address {
     @Column(name = "city")
     private String city;
