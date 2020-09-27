@@ -26,13 +26,26 @@ public class GlobalExceptionHandler extends ApplicationService {
     }
 
     /**
-     * FUNCTION :: Validation Error
+     * FUNCTION :: Validation 오류
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public String ValidationException(ConstraintViolationException e) {
         log.info("Exception Validation [" + e.getClass() + "] [" + e.getMessage() + "]");
         HashMap<String, Object> rtnMap = returnMap();
-        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_ILLEGAL_STATE); // 유효성 검증 오류
+        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_ILLEGAL_STATE); //LINE :: 유효성 검증 오류
+        return jsonFormatTransfer(rtnMap);
+    }
+
+    /**
+     * FUNCTION :: Duplication 오류
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MemberDuplicationException.class)
+    public String DuplicationException(MemberDuplicationException e) {
+        log.info("Exception Validation [" + e.getClass() + "] [" + e.getMessage() + "]");
+        HashMap<String, Object> rtnMap = returnMap();
+        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_DUPLICATE); //LINE :: 이메일 중복 오류
         return jsonFormatTransfer(rtnMap);
     }
 
