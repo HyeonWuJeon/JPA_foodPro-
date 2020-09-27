@@ -5,6 +5,7 @@ import com.foodPro.demo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final MemberService memberService;
 
     @Bean
@@ -40,27 +42,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                // 페이지 권한 설정
-                .antMatchers("/api").permitAll()
+                // LINE :: 페이지 권한 설정
+                .antMatchers("/api/admin").hasRole(Role.ADMIN.name())
+                .antMatchers("/admin").hasRole(Role.ADMIN.name())
+                .antMatchers("/api/member").permitAll()
                 .antMatchers("/h2-console/*").permitAll()
                 .antMatchers("/resources/**").permitAll()
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and()//로그인
 //                .csrf()
 //                .ignoringAntMatchers("/api/member/**")
 //                .and()
                 .formLogin()
-                .loginPage("/member/login")
+                .loginPage("/login")
                 .defaultSuccessUrl("/").permitAll()
                 .and() // 로그아웃 설정
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/");
 //                .and()
 //                    .oauth2Login()
 //                        .userInfoEndpoint()
 //                            .userService(customOAuth2UserService);
 
+    }
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
     }
 
 
