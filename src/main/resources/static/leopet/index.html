@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/config :: configFragment"/>
+
+<body>
+    <header th:replace="fragments/header :: headerFragment"></header>
+
+    <!-- banner part start-->
+    <section class="banner_part">
+        <div class="container">
+            <div class="row align-content-center">
+                <div class="col-lg-7 col-xl-6">
+                    <div class="banner_text">
+                        <h5>The Best Gift For Your Pets</h5></br>
+                        <h2>구해독의 <u>빅데이터</u>로 제공하는</br>
+                        정확도 높은 <u>인공지능</u></br> 질병 진단 서비스를 만나보세요.</h2></br>
+                        <a href="#" class="btn_1">질병 진단 서비스 바로가기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- banner part start-->
+
+    <!-- about part start-->
+    <section class="about_part section_padding">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-6">
+                    <div class="about_img">
+                        <img src="img/about.png" alt="">
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="about_text">
+                        <img src="img/about_icon.png" class="about_icon" alt="">
+                        <h2>We care your pet
+                            As you care</h2>
+                        <p>Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering through animal welfare when people might depend on livestock as their only source of income or food.</p>
+                        <a href="#" class="btn_1">About Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- about part start-->
+
+    <!-- service part start-->
+    <section class="service_part section_padding services_bg">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="section_tittle text-center">
+                        <img src="img/about_icon.png" alt="">
+                        <h2>We Provide Best Services</h2>
+                        <p>Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering through animal welfare when people might depend.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single_service_part">
+                        <img src="img/single_service_1.png" alt="#">
+                        <h3>Pet Surgeries</h3>
+                        <p>Our free veterinary services are available to pets whose owners are on certain means-tested benefits.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single_service_part">
+                        <img src="img/single_service_2.png" alt="#">
+                        <h3>Pet Adoption</h3>
+                        <p>Our free veterinary services are available to pets whose owners are on certain means-tested benefits.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single_service_part">
+                        <img src="img/single_service_3.png" alt="#">
+                        <h3>Pet Care</h3>
+                        <p>Our free veterinary services are available to pets whose owners are on certain means-tested benefits.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- service part end-->
+    <footer th:replace="fragments/footer :: footerFragment"></footer>
+</body>
+
+</html>
