@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MemberController {
 
-    @GetMapping("/signUpForm")
-    public String signUpForm(Model model){
-        model.addAttribute("memberForm", new MemberDto.Request());
-        return "member/signup";
-    }
-
+        @GetMapping("/user/findAll")
+        public String findAll(){
+            return "member/list";
+        }
 }

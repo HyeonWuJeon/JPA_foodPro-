@@ -8,12 +8,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * 토큰 유효성 검사
- * 유효성검사에 실패할 경우 에러페이지로 이동
- */
 public class JwtTokenInterceptor implements HandlerInterceptor {
 
+    /**
+     * FUNCTION :: 토큰사용시 적용할 수 있는 인터셉터
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws IOException
+     * @throws IOException
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException, IOException {
         String header = request.getHeader(AuthConstants.AUTH_HEADER);

@@ -2,6 +2,7 @@ package com.foodPro.demo.member.domain;
 
 
 import com.foodPro.demo.config.common.Address;
+import com.foodPro.demo.config.security.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,16 @@ public class Member {
     private String pwd; // LINE :: 패스워드
 
     @Column @Length(max = 200) @NotBlank
-    private String email; // LINE :: 이메일ㅏ
+    private String email; // LINE :: 이메일
 
     @Column @Length(max = 11) @NotBlank
     private String birth; // LINE :: 생일
 
     @Column @Length(max = 11) @NotBlank
     private String phone; // LINE :: 휴대폰 번호
+
+    @Enumerated(EnumType.STRING)
+    private Role role;          //LINE :: ADMIN : 관리자 / GUEST : 사용자
 
     @Embedded
     private Address address; // LINE :: 주소

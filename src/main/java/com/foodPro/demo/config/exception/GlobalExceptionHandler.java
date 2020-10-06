@@ -15,7 +15,7 @@ public class GlobalExceptionHandler extends ApplicationService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * FUNCTION :: Checked Error
+     * FUNCTION :: Checked 오류
      * @param e
      */
     @ExceptionHandler(Exception.class)
