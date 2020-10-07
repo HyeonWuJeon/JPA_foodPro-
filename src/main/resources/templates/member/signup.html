@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/config :: configFragment"/>
+<body>
+<header th:replace="fragments/head :: headerFragment"></header>
+
+<div class="limiter">
+    <div class="container-login100" >
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+            <!--/*@thymesVar id="memberForm" type=""*/-->
+            <form class="login100-form validate-form" id="member_signup" th:object="${memberForm}">
+                <span class="login100-form-title p-b-49">회원가입</span>
+
+                <div class="form-group">
+                    <label th:for="name">이름</label>
+                    <input type="text" th:field="*{name}" class="form-control"
+                           placeholder="이름을 입력해주세요"
+                           th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'" required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="emaFil">이메일</label>
+                    <input type="email" th:field="*{email}" class="form-control"
+                           id="user_email" placeholder="이메일을 입력해주세요 ('@' 포함해주세요)" required>
+                    <div class="check_font" id="email_check"></div>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="password">비밀번호</label>
+                    <input type="password" th:field="*{pwd}" class="form-control"
+                           id="user_password" placeholder="비밀번호를 입력해주세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="password2">비밀번호 확인</label>
+                    <input type="password" th:field="*{pwdChk}" class="form-control"
+                           id="user_password2" placeholder="비밀번호를 확인해주세요" required>
+                    <div class="check_font" id="pwd_check"></div>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="phone">전화번호</label>
+                    <input type="text" th:field="*{phone}" class="form-control"
+                           maxlength="11"
+                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                           placeholder="전화번호를 입력해주세요 (숫자만 입력해주세요)" required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="birth">생일</label>
+                    <input type="date" th:field="*{birth}" class="form-control"
+                           placeholder="생일을 입력해주세요" required>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="zipcode">우편번호</label>
+                    <div class="form-inline form-group">
+                        <input type="text" th:field="*{zipcode}" class="form-control" id="sample6_postcode"
+                               placeholder="우편번호" readonly required>
+                        &nbsp;&nbsp;&nbsp;
+                        <input type="button" onclick="sample6_execDaumPostcode()"
+                               class="btn btn-info" value="우편번호 검색"><br>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label th:for="city">주소</label>
+                    <input type="text" th:field="*{city}" class="form-control" id="sample6_address" placeholder="주소"
+                           readonly required><br>
+                    <label th:for="street">상세주소</label>
+                    <input type="text" th:field="*{street}" class="form-control" id="sample6_detailAddress"
+                           placeholder="상세주소" required>
+                </div>
+
+<!--                <div class="row" style="padding-left: 15px; padding-bottom: 15px;">-->
+<!--                            <span>-->
+<!--                                <input type="radio" id="GUEST" value="GUEST" th:field="*{role}" required>-->
+<!--                                <label for="GUEST" style="padding-right: 10px">사용자</label>-->
+<!--                            </span>-->
+
+<!--                    <span>-->
+<!--                                <input type="radio" id="VET" value="VET" th:field="*{role}" required>-->
+<!--                                <label for="VET" style="padding-right: 10px">수의사</label>-->
+<!--                            </span>-->
+<!--                </div>-->
+
+                <div class="container-login100-form-btn">
+                    <div class="wrap-login100-form-btn">
+                        <div class="login100-form-bgbtn"></div>
+                        <a class="login100-form-btn" onclick="signUp()">
+                            회원가입
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="dropDownSelect1"></div>
+<script src="/../static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/../static/js/main.js"></script>
+<!--===============================================================================================-->
+
+<!--===============================================================================================-->
+<script src="/../static/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="/../static/vendor/bootstrap/js/popper.js"></script>
+<script src="/../static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="/../static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="/../static/vendor/daterangepicker/moment.min.js"></script>
+<script src="/../static/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="/../static/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/../static/js/postcode-api.js"></script>
+
+<footer th:replace="fragments/footer :: footerFragment"></footer>
+<script th:inline="javascript">
+    let idChk = false;
+    let pwChk = false;
+
+    function signUp() {
+
+        var formData = $('#member_signup').serialize();
+
+        if(idChk == false){
+            alert("아이디를 확인 해주세요!")
+            return false;
+        }
+        else if(pwChk == false){
+            alert("패스워드를 확인 해주세요!")
+            return false;
+        }
+        $.ajax({
+            url: "/api/member/signUp",
+            cache: false,
+            type: "POST",
+            data: formData,
+            success: function (data) {
+                console.log("결과 데이터"+ data);
+                let json = $.parseJSON(data);
+                if(json['httpCode'] == "401"){
+                    alert("입력값을 확인해주세요!")
+
+                }
+                else if(json['httpCode'] == "200"){
+                    location.href="/login"
+                } else{
+                    alert("오류입니다 관리자에게 문의하세요.")
+                }
+
+            },
+            error: function (error) {
+                console.log("실패");
+            }
+        })
+
+    }
+
+    function validate(){
+        if ($('#user_email').val() == "") {
+            $('#email_check').text('이메일을 입력해주세요. :)');
+            $('#email_check').css('color', 'red');
+            $("#user_email").focus();
+            idChk = false;
+            return false;
+        }
+        else if ($('#user_email').val().indexOf("@") == -1 ||
+            $('#user_email').val().indexOf(".") == -1) {
+            $("#email_check").text("이메일 형식이 아닙니다. :(");
+            $("#email_check").css("color", "red");
+            $("#user_email").focus();
+            idChk = false;
+            return false;
+        }
+        return true;
+    }
+
+    // 아이디 유효성 검사(1 = 중복 / 0 != 중복)
+    $(document).ready(function () {
+        $("#user_email").blur(function () {
+            if(validate()) {
+                var email = {email: $('#user_email').val()};
+                $.ajax({
+                    type: "POST",
+                    cache: false,
+                    url: "/api/member/checkEmail",
+                    data: email,
+                    success: function (data) {
+                        var json = $.parseJSON(data);
+                        if (json.httpCode != 200) {
+                            // 1 : 이메일이 중복되는 문구
+                            $("#email_check").text("사용중인 이메일입니다. :p");
+                            $("#email_check").css("color", "red");
+                            $("#user_email").focus();
+                            idChk = false;
+                        } else {
+                            $("#email_check").text("사용가능한 이메일입니다. :p");
+                            $("#email_check").css("color", "blue");
+                            idChk = true;
+                        }
+                    },
+                    error: function () {
+                        console.log("실패");
+                    }
+                });
+            }
+        });
+
+        // 비빌번호, 비빌번호 확인 라벨 비교 구문
+        $("#user_password2").blur(function () {
+
+            const pw1 = $('#user_password').val();
+            const pw2 = $('#user_password2').val();
+            let num = pw1.search(/[0-9]/g);
+            let eng = pw1.search(/[a-z]/);
+            let spe = pw1.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+            if (pw1 === pw2 && pw1.length > 8 && pw1.length < 20 && pw1.search(/\s/) == -1 &&
+                num >= 0 && eng >= 0 && spe >= 0) {
+                $("#pwd_check").text("패스워드가 일치합니다. :) ");
+                $("#pwd_check").css("color", "blue");
+                pwChk=true;
+            }
+            else if(pw1.length < 8 || pw1.length > 20){
+                $("#pwd_check").text("8자리 ~ 20자리 이내로 입력해주세요. :p ");
+                $("#pwd_check").css("color", "red");
+                $("#user_password").focus();
+                pwChk=false;
+            }else if(pw1.search(/\s/) != -1){
+                $("#pwd_check").text("비밀번호는 공백 없이 입력해주세요. :p ");
+                $("#pwd_check").css("color", "red");
+                $("#user_password").focus();
+                pwChk=false;
+            }
+            else if(num < 0 || eng < 0 || spe < 0 ){
+                $("#pwd_check").text("영문,숫자, 특수문자를 혼합하여 입력해주세요. :p ");
+                $("#pwd_check").css("color", "red");
+                $("#user_password").focus();
+                pwChk=false;
+            }
+            else if(pw1 != pw2) {
+                pwChk=false;
+                $("#pwd_check").text("패스워드가 일치하지 않습니다. :p ");
+                $("#pwd_check").css("color", "red");
+                $("#user_password").focus();
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>
