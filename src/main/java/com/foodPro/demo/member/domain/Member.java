@@ -4,10 +4,7 @@ package com.foodPro.demo.member.domain;
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.order.domain.Order;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -18,7 +15,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
 public class Member {
 
     @Id
@@ -76,6 +72,10 @@ public class Member {
         this.address = new Address(city, zipcode, street);
         this.phone = phone;
         return this;
+    }
+
+    protected Member(){
+
     }
 }
 

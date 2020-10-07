@@ -29,4 +29,9 @@ public class Delivery {
     public void setOrder(Order order){
         this.order = order;
     }
+
+    //배송지 정보
+    public void setAddress(Address address){
+        this.address = address;
+    }
 }

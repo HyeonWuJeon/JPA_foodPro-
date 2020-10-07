@@ -1,7 +1,7 @@
 package com.foodPro.demo.catagory;
 
 
-import com.foodPro.demo.food.domain.Item;
+import com.foodPro.demo.food.domain.CatagoryItem;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -21,11 +21,13 @@ public class Catagory {
     private String name; //LINE :: 카테고리 이름
 
     // ManyToMany : 중간 매핑테이블에 필드 추가 불가능.
-    @ManyToMany //LINE :: 실무에서는 사용 금지
-    @JoinTable(name = "catagory_item",
-            joinColumns = @JoinColumn(name = "catagory_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id"))     // LINE :: 중간 테이블 매핑 . 관계형 DB는 collection 관계가 없기 때문에 1:n n:1 로 풀어낼 수 있는 DB가 필요하다
-    private List<Item> itemList = new ArrayList<>();
+//    @ManyToMany //LINE :: 실무에서는 사용 금지
+//    @JoinTable(name = "catagory_item",
+//            joinColumns = @JoinColumn(name = "catagory_id"),
+//            inverseJoinColumns = @JoinColumn(name = "item_id"))     // LINE :: 중간 테이블 매핑 . 관계형 DB는 collection 관계가 없기 때문에 1:n n:1 로 풀어낼 수 있는 DB가 필요하다
+//  private List<Item> itemList = new ArrayList<>();
+    @OneToMany(mappedBy = "catagory", fetch= LAZY)
+    private List<CatagoryItem> catagoryItemList = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
