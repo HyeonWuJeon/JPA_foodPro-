@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @Embeddable
 @Getter
-@NoArgsConstructor
 public class Address {
     @Column(name = "city")
     private String city;
@@ -20,7 +19,13 @@ public class Address {
     @Column(name = "street")
     private String street;
 
-    @Builder
+    /**
+     * JPA 스펙상 임베디드나 엔티티의 경우 기본 생성자가 필요하다.
+     * JPA구현 라이브러리가 객체를 생성할 때 프록시나 리플렉션 기술을 사용 할 수 있도록 지원해야 하기 때문이다.
+     */
+    protected Address(){
+    }
+
     public Address(String city, String zipcode, String street) {
         this.city = city;
         this.zipcode = zipcode;
