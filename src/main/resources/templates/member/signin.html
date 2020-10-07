@@ -80,14 +80,14 @@
             email: $("#email").val()
         };
 		$.ajax({
-            url: "/member/login",
+            url: "/api/member/login",
             cache: false,
             dataType: 'text',
             type: "POST",
             data: JSON.stringify(data),
 			success: function (res, status, xhr){
                 localStorage.setItem("authorization", xhr.getResponseHeader("Authorization"));
-                // location.href = "/";
+                location.href = "/";
 			},
             error : function(jqXHR, textStatus, errorThrown) {
                 alert("아이디 혹은 패스워드를 확인해주세요.");
