@@ -4,6 +4,8 @@ import com.foodPro.demo.config.common.ApplicationService;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,16 +30,14 @@ public class MemberApiController extends ApplicationService {
 
     /**
      * FUNCTION :: 중복검사
-     * @param user_email
+     * @param request
      * @return
      */
     @PostMapping(value = "/checkEmail")
-    public String checkEmail(@RequestBody String user_email) {
+    public String checkEmail(MemberDto.Request request) {
         HashMap<String, Object> rtnMap = returnMap();
-        memberService.validateDuplicateMember(user_email);
-        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_SUCCESS); //성공
+        memberService.validateDuplicateMember(request.getEmail());
+        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_SUCCESS);
         return jsonFormatTransfer(rtnMap);
     }
-
-
 }
