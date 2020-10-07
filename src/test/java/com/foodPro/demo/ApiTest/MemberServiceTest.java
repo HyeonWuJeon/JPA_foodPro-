@@ -2,8 +2,11 @@ package com.foodPro.demo.ApiTest;
 
 
 import com.foodPro.demo.config.common.Address;
+import com.foodPro.demo.config.exception.MemberDuplicationException;
+import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
+import com.foodPro.demo.member.repository.MemberRepository;
 import com.foodPro.demo.member.service.MemberService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,67 +24,74 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 
 import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @Transactional
 public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @PersistenceContext
     EntityManager em;
+
     //given
     static String name = "현우";
     static String pwd = "12345";
     static String phone = "0109259";
     static String birth = "19951129";
-    static String email = "test@gmail.com";
+    static String email = "yusa2@naver.com";
     static String city = "서울";
     static String zipcode = "330";
     static String street = "용마산로";
+    static Role role = Role.ADMIN;
+
 
     @Test
     @Rollback(false)
     public void 회원가입(){
+        //given
+        Address address = new Address(city, zipcode, street);
+        MemberDto.Request request = new MemberDto.Request(name,pwd, email,birth,phone,city,zipcode,street,address,role);
         //when
-        memberService.SignUp(MemberDto.Request.builder()
-                .address(new Address(city, zipcode, street))
-                .email(email)
-                .name(name)
-                .birth(birth)
-                .city(city)
-                .pwd(pwd)
-                .street(street)
-                .phone(phone)
-                .build());
+        memberService.SignUp(request);
         //then
-        assertThat(em.find(Member.class, 1L).getName()).isEqualTo(name);
-        // 이메일 중복일 경우
-        fail("이메일 중복 예외");
+        Member member = memberRepository.findById(1L).get();
+        assertThat(member.getName()).isEqualTo(name);
     }
 
-    @Test(expected = ConstraintViolationException.class)
-    public void 유효성검사(){
-        //when
-        memberService.SignUp(MemberDto.Request.builder()
-                .address(new Address(city, zipcode, street))
-                .email(email)
-                .name(null)
-                .birth(birth)
-                .city(city)
-                .pwd(pwd)
-                .street(street)
-                .phone(phone)
-                .build());
 
-        fail("예외가 발생해야 한다");
+    @Test(expected = MemberDuplicationException.class)
+    public void 이메일_중복검사(){
+
+        memberService.validateDuplicateMember(email);
+
     }
 
+    @Test
+    @Rollback(false)
+    public void 회원수정(){
+        //given
+        Address address = new Address("경기도", "광명", "00동");
+        MemberDto.Request request = new MemberDto.Request().builder()
+                .city(address.getCity())
+                .street(address.getStreet())
+                .zipcode(address.getZipcode())
+                .phone("01012341234")
+                .build();
+        memberService.update(1L, request);
+
+        Member member = memberRepository.findById(1L).get();
+        assertThat(member.getAddress().getCity()).isEqualTo("경기도");
+
+    }
 
 }

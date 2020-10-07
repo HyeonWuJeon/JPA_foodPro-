@@ -27,26 +27,13 @@ public class MemberDto {
         private String email; // LINE :: 이메일
         private String birth; // LINE :: 생일
         private String phone; // LINE :: 휴대폰 번호
-        private String pwdChk; //LINE :: pwd 체크
         private String city;
         private String zipcode;
         private String street;
         private Address address;
         private Role role;
 
-
         public Request() {
-        }
-
-        /**
-         * FUNCTION ;: 주소값 등록
-         * @param zipcode
-         * @param city
-         * @param street
-         * @return
-         */
-        public Address setAddress(String zipcode, String city, String street){
-            return new Address(zipcode, city, street);
         }
 
         public Member toEntity() {
@@ -57,6 +44,7 @@ public class MemberDto {
                     .birth(birth)
                     .phone(phone)
                     .address(address)
+                    .role(role.ADMIN)
                     .build();
         }
     }
