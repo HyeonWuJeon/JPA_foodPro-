@@ -1,4 +1,4 @@
-package com.foodPro.demo.food.domain;
+package com.foodPro.demo.item.domain;
 
 import com.foodPro.demo.config.exception.NotEnoughStockException;
 import lombok.Getter;

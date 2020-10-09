@@ -25,9 +25,6 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         MemberDto.Response member = ((MemberDto.Response) authentication.getPrincipal());
         String token = JwtTokenProvider.createToken(member.getEmail());
 
-//        request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-//        HttpSession session = request.getSession();
-//        session.setAttribute(AuthConstants.AUTH_HEADER, token);
         response.addHeader(AuthConstants.AUTH_HEADER,  AuthConstants.TOKEN_TYPE + " " + token); //LINE :: 토큰을 헤더에 실어 보낸다.
     }
 }

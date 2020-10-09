@@ -1,10 +1,8 @@
 package com.foodPro.demo.ApiTest;
 
-import com.foodPro.demo.food.domain.Item;
-import com.foodPro.demo.food.domain.item.Book;
-import com.foodPro.demo.food.dto.ItemDto;
-import com.foodPro.demo.food.repository.ItemRepository;
-import com.foodPro.demo.food.service.ItemService;
+import com.foodPro.demo.item.domain.item.Book;
+import com.foodPro.demo.item.dto.ItemDto;
+import com.foodPro.demo.item.service.ItemService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +36,12 @@ public class ItemServiceApiTest {
         int price = 10000;
         int stock = 22;
         String author = "히가시노게이고";
-        ItemDto.Request request = new ItemDto.Request("B",name, price, stock, author);
+        ItemDto.Request request = new ItemDto.Request();
+        request.setPrice(price);
+        request.setName(name);
+        request.setAuthor(author);
+        request.setGubun("B");
+        request.setStockQuantity(stock);
         //when
         itemService.saveItem(request);
         //then

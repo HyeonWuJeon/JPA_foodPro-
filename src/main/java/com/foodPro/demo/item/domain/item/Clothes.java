@@ -1,6 +1,6 @@
-package com.foodPro.demo.food.domain.item;
+package com.foodPro.demo.item.domain.item;
 
-import com.foodPro.demo.food.domain.Item;
+import com.foodPro.demo.item.domain.Item;
 import lombok.Builder;
 import lombok.Getter;
 

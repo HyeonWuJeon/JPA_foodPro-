@@ -1,7 +1,6 @@
-package com.foodPro.demo.food.repository;
+package com.foodPro.demo.item.repository;
 
-import com.foodPro.demo.food.domain.Item;
-import com.foodPro.demo.member.domain.Member;
+import com.foodPro.demo.item.domain.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

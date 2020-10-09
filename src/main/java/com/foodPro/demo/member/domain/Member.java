@@ -14,7 +14,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 public class Member {
 
     @Id
@@ -56,6 +55,9 @@ public class Member {
     @OneToMany(mappedBy = "member") //LINE :: 주문목록 읽기전용
     private List<Order> orderList = new ArrayList<>();
 
+    /**
+     * 회원 가입
+     */
     @Builder
     public Member(String name, Address address, String email, String pwd, String birth, String phone,Role role) {
         this.name = name;

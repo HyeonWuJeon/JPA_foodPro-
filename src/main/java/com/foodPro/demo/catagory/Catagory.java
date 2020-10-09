@@ -1,7 +1,7 @@
 package com.foodPro.demo.catagory;
 
 
-import com.foodPro.demo.food.domain.CatagoryItem;
+import com.foodPro.demo.item.domain.CatagoryItem;
 import lombok.Getter;
 
 import javax.persistence.*;

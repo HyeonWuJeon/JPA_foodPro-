@@ -1,17 +1,21 @@
 package com.foodPro.demo.order.domain;
 
 import com.foodPro.demo.config.common.BaseTimeEntity;
-import com.foodPro.demo.food.domain.Item;
+import com.foodPro.demo.item.domain.Item;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
+import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = PROTECTED)
 public class OrderItem extends BaseTimeEntity {
 
     @Id @GeneratedValue
@@ -33,6 +37,14 @@ public class OrderItem extends BaseTimeEntity {
         this.order = order;
     }
 
+    /**
+     * 외부에서 인스턴스를 생성하여 변수를 못끌어다 쓰게금 protected 생성자로 막는다.
+     * 외부 클래스의 함수에서 변수가 함부로 남용(setter) 되어 쓸 경우 유지보수 하기 힘들어진다.
+     * OrderItem orderItem = new OrderItem() <- Compile Error
+     * @NoArgs(access = protected)로 대체할 수 있다.
+     */
+
+    // 비지니스로직 :: 주문
     public static OrderItem createOrderItem(Item item, int orderPrice, int count){
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item); // LINE :: 구매한 아이템 정보
@@ -43,6 +55,9 @@ public class OrderItem extends BaseTimeEntity {
         return orderItem;
     }
 
+    /**
+     * 변경내역 감지
+     */
     // 비지니스 로직 :: 취소한 만큼 재고 수량 원복
     public void cancle() {
         getItem().addStock(count);

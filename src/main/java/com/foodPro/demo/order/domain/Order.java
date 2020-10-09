@@ -4,7 +4,9 @@ import com.foodPro.demo.config.common.BaseTimeEntity;
 import com.foodPro.demo.delivery.Delivery;
 import com.foodPro.demo.delivery.DeliveryStatus;
 import com.foodPro.demo.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.catalina.valves.HealthCheckValve;
 
 import javax.persistence.*;
@@ -18,6 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "orders")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseTimeEntity {
     @Id
     @GeneratedValue
@@ -57,12 +60,12 @@ public class Order extends BaseTimeEntity {
         delivery.setOrder(this);
     }
 
-    // 주문상태 설정
+    // DDD :: 주문상태 설정
     public void setOrderStatus(OrderStatus status){
             this.orderStatus = status;
     }
 
-    // 생성 시점부터 주문 생성
+    // DDD :: 생성 시점부터 주문 생성
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         Order order = new Order();
         order.setMember(member); // LINE :: 주문한 회원
@@ -74,20 +77,24 @@ public class Order extends BaseTimeEntity {
         return order;
     }
 
-    // 비지니스 로직 :: 주문 취소
+    // DDD :: 주문 취소
     public void cancle(){
         if(delivery.getDeliveryStatus() == DeliveryStatus.COMP){
             throw new IllegalStateException("사용자가 배송 완료된 상품을 취소 한다.");
         }
 
+        /**
+         * 변경내역 감지
+         */
         setOrderStatus(OrderStatus.CANCLE);
 
+        // LINE :: 취소한 재고만큼 수량 원복
         for (OrderItem orderItem : orderItemList) {
             orderItem.cancle();
         }
     }
 
-    // 비지니스로직 :: 주문 가격 조회
+    // DDD :: 주문 가격 조회
     public int getTotalPrice(){
         int totalPrice = 0;
         for (OrderItem orderItem : orderItemList) {

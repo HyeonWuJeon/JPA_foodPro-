@@ -1,18 +1,16 @@
-package com.foodPro.demo.food.dto;
+package com.foodPro.demo.item.dto;
 
-import com.foodPro.demo.food.domain.Item;
-import com.foodPro.demo.food.domain.item.Book;
-import com.foodPro.demo.food.domain.item.Clothes;
-import com.foodPro.demo.food.domain.item.Food;
+import com.foodPro.demo.item.domain.Item;
+import com.foodPro.demo.item.domain.item.Book;
+import com.foodPro.demo.item.domain.item.Clothes;
+import com.foodPro.demo.item.domain.item.Food;
 import lombok.*;
 
 
 @Getter
-@AllArgsConstructor
 public class ItemDto {
     @Data
     public static class Request{
-
         private String gubun;
         private String name;
         private int price;
@@ -60,11 +58,13 @@ public class ItemDto {
 
     @Getter
     public static class Response{
+        private Long id;
         private String name;
         private int price;
         private int stockQuantity;
 
         public Response(Item entity){
+            this.id = entity.getId();
             this.name = entity.getName();
             this.price =entity.getPrice();
             this.stockQuantity=entity.getStockQuantity();

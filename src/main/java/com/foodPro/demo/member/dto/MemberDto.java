@@ -15,7 +15,6 @@ import java.util.Set;
 
 
 @Getter
-@AllArgsConstructor
 public class MemberDto {
 
     @Data

@@ -1,4 +1,4 @@
-package com.foodPro.demo.food.repository;
+package com.foodPro.demo.item.repository;
 
 import com.foodPro.demo.catagory.Catagory;
 import org.springframework.data.jpa.repository.JpaRepository;
