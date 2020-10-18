@@ -10,5 +10,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "SELECT o FROM Order o join o.member m where o.orderStatus =:status and m.email like :email")
-    List<Order> OrderSearch(OrderStatus status, String name);
+    List<Order> OrderSearch(OrderStatus status, String email);
 }

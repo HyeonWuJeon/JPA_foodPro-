@@ -1,6 +1,7 @@
 package com.foodPro.demo.item.domain;
 
 import com.foodPro.demo.config.exception.NotEnoughStockException;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "ftype")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Item {
 
     @Id
@@ -40,7 +41,7 @@ public abstract class Item {
         catagoryItem.setItem(this);
     }
 
-    // 비지니스 로직 :: 재고 수량 증가
+    // 비지니스 로직 :: 재고 수량 증가 (변수 변경)
     public void addStock(int quantity){
         this.stockQuantity += quantity;
     }
@@ -53,4 +54,5 @@ public abstract class Item {
         }
         this.stockQuantity = restStock;
     }
+
 }

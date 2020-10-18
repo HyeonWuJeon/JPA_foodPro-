@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "orders")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // 외부에서 인스턴스를 생성해서 접근 못하도록 막아준다.
 public class Order extends BaseTimeEntity {
     @Id
     @GeneratedValue

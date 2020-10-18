@@ -30,13 +30,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         System.out.println("token = " + token);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); //세션적용됨
-        log.info("aop authentication " + authentication.toString());
-        log.info("user auth : " + authentication.getAuthorities() +" user name : " + authentication.getName());
+//        log.info("aop authentication " + authentication.toString());
+//        log.info("user auth : " + authentication.getAuthorities() +" user name : " + authentication.getName());
+
         if(authentication.getPrincipal().equals("anonymousUser")){
             response.sendRedirect("/error/unauthorized");
             return false;
         }
         return true;
     }
-
 }

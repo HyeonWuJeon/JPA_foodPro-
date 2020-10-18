@@ -6,8 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Role {
-    ADMIN("ROLE_ADMIN","ADMIN"), //LINE :: 관리자
-    GUEST("ROLE_MEMBER","GUEST"); //LINE :: 회원
+    GUEST("ROLE_MEMBER","GUEST"), //LINE :: 회원
+    ADMIN("ROLE_ADMIN","ADMIN"); //LINE :: 관리자
+
+
 
     private String value;
     private String title;

@@ -12,6 +12,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +48,11 @@ public class MemberServiceTest {
     EntityManager em;
 
     //given
-    static String name = "현우";
-    static String pwd = "12345";
+    static String name = "";
+    static String pwd = "123451111111111111111111111";
     static String phone = "0109259";
     static String birth = "19951129";
-    static String email = "yusa2@naver.com";
+    static String email = "yusa3@naver.com";
     static String city = "서울";
     static String zipcode = "330";
     static String street = "용마산로";
@@ -56,11 +60,32 @@ public class MemberServiceTest {
 
 
     @Test
+    public void 회원조회(){
+        Page<Member> List = memberService.findAllDesc(Pageable.unpaged());
+        System.out.println("List = " + List);
+        
+        for (Member member : List){
+            System.out.println("member.toString() = " + member.toString());
+        }
+    }
+
+    @Test
     @Rollback(false)
     public void 회원가입(){
         //given
         Address address = new Address(city, zipcode, street);
-        MemberDto.Request request = new MemberDto.Request(name,pwd, email,birth,phone,city,zipcode,street,address,role);
+        MemberDto.Request request = new MemberDto.Request();
+         request.builder()
+                .name(name)
+                .pwd(pwd)
+                .email(email)
+                .birth(birth)
+                .phone(phone)
+                .zipcode(zipcode)
+                .city(city)
+                .street(street)
+                .role(role)
+                .build();
         //when
         memberService.SignUp(request);
         //then

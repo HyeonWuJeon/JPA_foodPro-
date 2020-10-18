@@ -40,6 +40,7 @@ public class TransactionAop {
 
         return new TransactionInterceptor((TransactionManager) transactionManager, attributeSource);
     }
+
     @Bean
     public Advisor transactionAdvisor() {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();

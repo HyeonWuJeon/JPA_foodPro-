@@ -48,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
                 .authorizeRequests()
                 // LINE :: 페이지 권한 설정
-                .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+//                .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                 .anyRequest().permitAll()
                 .and()//로그인
                 // LINE:: 토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session을 사용하지 않는다.

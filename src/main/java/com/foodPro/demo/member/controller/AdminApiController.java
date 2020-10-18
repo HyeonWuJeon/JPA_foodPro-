@@ -1,15 +1,18 @@
 package com.foodPro.demo.member.controller;
 
+import com.foodPro.demo.config.common.PageWrapper;
+import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/admin")
 @Controller
@@ -23,9 +26,15 @@ public class AdminApiController {
      * @return
      */
     @GetMapping("/list")
-    public String findAll(Model model) {
-        List<MemberDto.Response> responses = memberService.findAllDesc();
+    public String findAll(Model model,Pageable pageable) {
+
+
+        Page<MemberDto.Response> responses = memberService.findAllDesc(pageable);
+        PageWrapper<MemberDto.Response> page = new PageWrapper<>(responses, "/admin/list");
+
+        model.addAttribute("page", page);
         model.addAttribute("list", responses);
+
         return "member/list";
     }
 

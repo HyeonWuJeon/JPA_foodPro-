@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <header th:fragment="headerFragment">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
 
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
+            th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+
+    <link href="../static/css/guru.css"
+          th:href="@{/css/guru.css}" rel="stylesheet" media="screen"/>
     <!--::header part start::-->
     <header class="header_area">
         <div class="sub_header">
@@ -20,7 +29,7 @@
                             <a class="btn_1 d-none d-md-inline-block"
                                sec:authorize="isAnonymous()" th:href="@{'/login'}">로그인</a>
                             <a class="btn_1 d-none d-md-inline-block"
-                               sec:authorize="isAuthenticated()" th:href="@{'/member/logout'}">로그아웃</a>
+                               sec:authorize="isAuthenticated()" th:href="@{'/logout'}">로그아웃</a>
                         </div>
                     </div>
                 </div>

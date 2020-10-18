@@ -19,15 +19,6 @@ public class ItemDto {
         private String expirationDate;
         private String size;
 
-        //테스트 코드용
-//        public Request(String gubun, String name, int price, int stockQuantity, String author) {
-//            this.gubun = gubun;
-//            this.name = name;
-//            this.price = price;
-//            this.stockQuantity = stockQuantity;
-//            this.author =author;
-//        }
-
         public Book Book_toEntity() {
             return Book.builder()
                  .name(name)
