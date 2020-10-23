@@ -61,12 +61,12 @@ public class MemberServiceTest {
 
     @Test
     public void 회원조회(){
-        Page<Member> List = memberService.findAllDesc(Pageable.unpaged());
-        System.out.println("List = " + List);
-        
-        for (Member member : List){
-            System.out.println("member.toString() = " + member.toString());
-        }
+//        Page<Member> List = memberService.findAllDesc(Pageable.unpaged());
+//        System.out.println("List = " + List);
+//
+//        for (Member member : List){
+//            System.out.println("member.toString() = " + member.toString());
+//        }
     }
 
     @Test

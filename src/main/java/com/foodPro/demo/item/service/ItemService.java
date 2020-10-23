@@ -39,6 +39,8 @@ public class ItemService {
      * @return
      */
     public List<ItemDto.Response> findAllDesc(){
+
+        //LINE :: 검색기능 => 카테고리 + 페이징
         return itemRepository.findAllDesc().stream()
                 .map(ItemDto.Response::new)
                 .collect(Collectors.toList());

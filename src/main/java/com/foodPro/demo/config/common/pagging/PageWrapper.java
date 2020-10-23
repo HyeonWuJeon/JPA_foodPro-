@@ -1,4 +1,4 @@
-package com.foodPro.demo.config.common;
+package com.foodPro.demo.config.common.pagging;
 
 import org.springframework.data.domain.Page;
 

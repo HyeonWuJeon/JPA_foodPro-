@@ -12,6 +12,8 @@ import com.foodPro.demo.order.domain.OrderStatus;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,11 +72,9 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<OrderDto.Response> findAllDesc(OrderStatus status, String email) {
+    public Page<OrderDto.Response> findAllDesc(OrderStatus status, String email,Pageable pageable) {
         //페이징 적용하기, 검색정보
-        return orderRepository.OrderSearch(status, email).stream()
-                .map(OrderDto.Response::new)
-                .collect(Collectors.toList());
+        return orderRepository.OrderSearch(status, email,pageable).map(OrderDto.Response::new); // 주문상태, 사용자 이메일
     }
 
     /**

@@ -95,8 +95,7 @@ public class MemberService extends ApplicationService implements UserDetailsServ
      */
     @Transactional(readOnly = true)
     public Page<MemberDto.Response> findAllDesc(Pageable pageable) {
-        Page<MemberDto.Response> members = memberRepository.findAllDesc(pageable).map(MemberDto.Response::new);
-        return members;
+            return memberRepository.findAllDesc(pageable).map(MemberDto.Response::new);
     }
 
     /**

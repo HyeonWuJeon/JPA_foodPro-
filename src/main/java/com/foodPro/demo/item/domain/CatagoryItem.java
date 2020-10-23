@@ -27,7 +27,11 @@ public class CatagoryItem extends BaseTimeEntity {
     @JoinColumn(name = "catagory_id")
     private Catagory catagory; //LINE :: 카테고리 외래키
 
-
+    /**
+     * 카테고리 등록을 어떻게할것인가?
+     * @param catagory
+     * @return
+     */
     public static CatagoryItem catalogueItem(Catagory catagory){
         CatagoryItem catalogueItem = new CatagoryItem();
         catalogueItem.setCatagory(catagory); //LINE :: 카테고리 등록
