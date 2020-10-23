@@ -36,3 +36,5 @@ insert into member(city,street,zipcode,birth,email,low_pwd,name,pwd,phone,role) 
 '관리자1','$2a$10$vSVR1G76tS1yuG21Pbi.pegf2fHz2SrD11qPeloqDna1hOopv3ZdO',
 '010-111-111','ADMIN');
 
+
+insert into Item values('F',1,'치킨','10000',30);
