@@ -5,6 +5,8 @@ import com.foodPro.demo.item.dto.ItemDto;
 import com.foodPro.demo.item.repository.CatagoryRepository;
 import com.foodPro.demo.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +40,10 @@ public class ItemService {
      * FUNCTION :: 아이템 조회
      * @return
      */
-    public List<ItemDto.Response> findAllDesc(){
+    public Page<ItemDto.Response> findAllDesc(Pageable pageable){
 
         //LINE :: 검색기능 => 카테고리 + 페이징
-        return itemRepository.findAllDesc().stream()
-                .map(ItemDto.Response::new)
-                .collect(Collectors.toList());
+        return itemRepository.findAllDesc(pageable).map(ItemDto.Response::new);
     }
 
     /**

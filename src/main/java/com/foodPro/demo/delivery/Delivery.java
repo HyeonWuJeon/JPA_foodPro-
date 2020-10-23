@@ -34,4 +34,10 @@ public class Delivery {
     public void setAddress(Address address){
         this.address = address;
     }
+
+    //주문 상태
+
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
 }

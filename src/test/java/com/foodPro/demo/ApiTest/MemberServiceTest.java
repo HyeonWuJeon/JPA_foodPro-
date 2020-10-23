@@ -49,7 +49,7 @@ public class MemberServiceTest {
 
     //given
     static String name = "";
-    static String pwd = "123451111111111111111111111";
+    static String pwd = "12345";
     static String phone = "0109259";
     static String birth = "19951129";
     static String email = "yusa3@naver.com";

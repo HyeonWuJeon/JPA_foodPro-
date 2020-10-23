@@ -19,5 +19,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query(value = "SELECT m FROM Member m ORDER BY m.id DESC")
     Page<Member> findAllDesc(Pageable pageable);
 
+    Optional<Member> findById(Long id);
+
 
 }

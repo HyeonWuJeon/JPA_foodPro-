@@ -71,6 +71,7 @@ public class MemberService extends ApplicationService implements UserDetailsServ
      */
     @Transactional(readOnly = true)
     public void passwordSameChk(String pwd, String pwdChk) {
+        System.out.println("pwd +\"  ? \"+ pwdChk = " + pwd +"  ? "+ pwdChk);
       if(pwd.equals(pwdChk)){
           throw new IllegalArgumentException("패스워드 일치하지 않음");
       }

@@ -1,6 +1,7 @@
 package com.foodPro.demo.order.service;
 
 import com.foodPro.demo.delivery.Delivery;
+import com.foodPro.demo.delivery.DeliveryStatus;
 import com.foodPro.demo.item.domain.Item;
 import com.foodPro.demo.item.repository.ItemRepository;
 import com.foodPro.demo.member.domain.Member;
@@ -46,6 +47,7 @@ public class OrderService {
         Delivery delivery = new Delivery();
         // LINE :: 배송주소
         delivery.setAddress(member.getAddress());
+        delivery.setDeliveryStatus(DeliveryStatus.READY);
         // LINE :: 주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
         // LINE :: 주문 생성

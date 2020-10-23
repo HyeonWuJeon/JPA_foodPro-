@@ -29,16 +29,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-//        web.ignoring().antMatchers("/static/**", "/css/**", "/js/**", "/img/**", "/lib/**");
-//    }
-
     @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    public void configure(WebSecurity web) throws Exception {
+        // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
+        web.ignoring().antMatchers("/static/**", "/css/**", "/js/**", "/img/**", "/lib/**","/db/**");
     }
+//
+//    @Override
+//    public void configure(WebSecurity web) {
+//        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

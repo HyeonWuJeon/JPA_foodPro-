@@ -4,8 +4,10 @@ import com.foodPro.demo.config.common.pagging.PageWrapper;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +26,7 @@ public class AdminApiController {
      * @return
      */
     @GetMapping("/list")
-    public String findAllDesc(Model model,Pageable pageable) {
-
+    public String findAllDesc(Model model,@PageableDefault(size = 5) Pageable pageable) {
 
         Page<MemberDto.Response> responses = memberService.findAllDesc(pageable);
         PageWrapper<MemberDto.Response> page = new PageWrapper<>(responses, "/admin/list");
