@@ -31,11 +31,11 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member; // LINE :: 주문한 사용자
 
-    @OneToMany(mappedBy = "order", cascade = ALL)
+    @OneToMany(mappedBy = "order", cascade = ALL, orphanRemoval = true) // orderItem은 부모에 종속된다
     private List<OrderItem> orderItemList = new ArrayList<>(); // LINE :: 주문한 음식
 
     @OneToOne(fetch = LAZY, cascade = ALL)
-    @JoinColumn(name = "delivery_id")
+    @JoinColumn(name = "delivery_id") //저장 쿼리를 안날려줘도 CASCADE로 인해 같이 저장된다.
     private Delivery delivery; //LINE :: 배송정보
 
     private LocalDateTime orderDate; //LINE :: 주문시간 < 자바 8 부터 hibernate가 @Data 를 지원해준다.

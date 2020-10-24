@@ -47,7 +47,7 @@ public class Member {
     @Embedded
     private Address address; // LINE :: 주소
 
-    @OneToMany(mappedBy = "member") //LINE :: 주문목록 읽기전용
+    @OneToMany(mappedBy = "member", orphanRemoval = true) //LINE :: 주문목록 읽기전용 :: 회원정보가 삭제되면 order 정보도 같이 삭제된다.
     private List<Order> orderList = new ArrayList<>();
 
 

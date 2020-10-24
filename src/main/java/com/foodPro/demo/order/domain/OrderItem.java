@@ -23,7 +23,7 @@ public class OrderItem extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "food_id")
+    @JoinColumn(name = "item_id")
     private Item item; //LINE :: 음식 외래키
 
     @ManyToOne(fetch = LAZY)

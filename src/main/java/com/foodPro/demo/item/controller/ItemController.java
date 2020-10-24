@@ -36,7 +36,6 @@ public class ItemController {
     @GetMapping("/new")
     public String save(Model model){
         model.addAttribute("itemForm", new ItemDto.Request());
-
         return "item/new";
     }
 
