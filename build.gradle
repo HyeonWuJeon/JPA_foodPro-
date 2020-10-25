@@ -41,13 +41,14 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	compile('org.springframework.boot:spring-boot-starter-oauth2-client')
 	compile 'org.springframework.boot:spring-boot-starter-jdbc'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
 
-	// https://mvnrepository.com/artifact/org.apache.poi/poi
+
+	// 세션 적용
+	compile('org.springframework.session:spring-session-jdbc')
+
+	// poi
 	compile group: 'org.apache.poi', name: 'poi', version: '3.17'
 
-	// https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
 	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
 }
 
