@@ -3,6 +3,8 @@ package com.foodPro.demo.config.common;
 import com.foodPro.demo.member.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +26,7 @@ import javax.annotation.Resource;
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Resource(name = "memberService")
+    @Resource(name = "memberService") //JAVA 에서 제공하는 의존주입, 이름으로 연결시킨다
     private UserDetailsService userDetailsService;
 
     private final BCryptPasswordEncoder passwordEncoder;

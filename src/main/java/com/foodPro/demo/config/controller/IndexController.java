@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Controller
 @RequiredArgsConstructor
@@ -65,5 +68,10 @@ public class IndexController {
             return "member/signup";
         }
         return memberService.SignUp(request);
+    }
+
+    @GetMapping(value ="/accessDenied")
+    public String denied(ServletResponse response) throws IOException {
+        return "accessDenied";
     }
 }

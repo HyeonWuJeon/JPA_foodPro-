@@ -13,9 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @ToString
-@Setter // 테스트용
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
@@ -25,6 +24,9 @@ public class Member {
 
     @Column
     private String name; // LINE :: 이름
+
+    @Column
+    private int age;
 
     @Column
     private String pwd; // LINE :: 패스워드
@@ -55,7 +57,7 @@ public class Member {
      * 회원 가입
      */
     @Builder
-    public Member(String name, Address address, String email, String pwd, String birth, String phone,Role role,String low_pwd) {
+    public Member(String name, Address address, String email, String pwd, String birth, String phone,Role role,String low_pwd, int age) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -64,6 +66,7 @@ public class Member {
         this.phone = phone;
         this.role = role;
         this.low_pwd = low_pwd;
+        this.age = age;
     }
 
     // 비지니스 로직 :: 회원 정보 수정

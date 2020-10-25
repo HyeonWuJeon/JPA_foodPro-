@@ -1,13 +1,28 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/config :: configFragment">
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 <body>
 <header th:replace="fragments/head :: headerFragment"></header>
-<!--<div class="col-md-12"></div>-->
-<!--<div class="col-md-12"></div>-->
-<!--<div class="col-md-12">-->
+
 <div class="container">
     <div>
+        <form class action="/admin/list" method="get">
+        <div class="form-option">
+            <select name="age" id="age">
+                <option th:value="0" th:selected = "${age} == 0 ? 'selected':''" >모든회원 보기</option>
+                <option th:value="10" th:selected="${age} == 10" >10대</option>
+                <option th:value="20" th:selected="${age} == 20" >20대</option>
+                <option th:value="30" th:selected="${age} == 30" >30대</option>
+                <option th:value="40" th:selected="${age} == 40" >40대</option>
+                <option th:value="50" th:selected="${age} == 50" >50대</option>
+                <option th:value="60" th:selected="${age} == 60" >60대</option>
+            </select>
+            <button type="submit" class="login100-form-btn">
+                검색
+            </button>
+        </div>
+        </form>
         <table class="table table-striped">
             <thead class="thead-strong">
             <tr>
@@ -19,6 +34,7 @@
                 <th>우편번호</th>
                 <th>폰번호</th>
                 <th>생일</th>
+                <th>나이</th>
                 <th>구분</th>
             </tr>
             </thead>
@@ -33,6 +49,7 @@
                 <td th:text="${member.address?.zipcode}"></td>
                 <td th:text="${member.phone}"></td>
                 <td th:text="${member.birth}"></td>
+                <td th:text="${member.age}"></td>
                 <td th:text="${member.role.toString()} == 'GUEST' ? '사용자' : '관리자'"></td>
             </tr>
             </tbody>
@@ -44,26 +61,27 @@
         <ul class='pagination pagination-centered'>
             <li th:class="${page.firstPage}?'disabled':''">
                 <span th:if='${page.firstPage}'>← First</span>
-                <a th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>← First</a>
+<!--                여기넣으면될듯!-->
+                <a th:if='${not page.firstPage}' th:href='@{${page.url}(age =${age},page=0,size=${page.size})}'>← First</a>
             </li>
             <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
                 <span th:if='${not page.hasPreviousPage}'>«</span>
-                <a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
+                <a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(age =${age},page=${page.number-2},size=${page.size})}'
                    title='Go to previous page'>«</a>
             </li>
             <li th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
                 <span th:if='${item.current}' th:text='${item.number}'>1</span>
-                <a th:if='${not item.current}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span
+                <a th:if='${not item.current}' th:href='@{${page.url}(age =${age},page=${item.number-1},size=${page.size})}'><span
                         th:text='${item.number}'>1</span></a>
             </li>
             <li th:class="${page.hasNextPage}? '' : 'disabled'">
                 <span th:if='${not page.hasNextPage}'>»</span>
-                <a th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}'
+                <a th:if='${page.hasNextPage}' th:href='@{${page.url}(age =${age},page=${page.number},size=${page.size})}'
                    title='Go to next page'>»</a>
             </li>
             <li th:class="${page.lastPage}? 'disabled' : ''">
                 <span th:if='${page.lastPage}'>Last →</span>
-                <a th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>Last
+                <a th:if='${not page.lastPage}' th:href='@{${page.url}(age =${age},page=${page.totalPages - 1},size=${page.size})}'>Last
                     →</a>
             </li>
         </ul>

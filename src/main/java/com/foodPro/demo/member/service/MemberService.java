@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -39,6 +40,8 @@ public class MemberService extends ApplicationService implements UserDetailsServ
         validateDuplicateMember(form.getEmail());
         // LINE :: 패스워드 일치검사
         passwordSameChk(form.getPwd(),form.getPwdChk());
+        // LINE :: 나이
+        int age = Integer.parseInt(form.getBirth().substring(0,4));
         // LINE :: 저장 + 유효성 검사
         memberRepository.save(new MemberDto.Request().builder()
                 .name(form.getName())
@@ -48,6 +51,7 @@ public class MemberService extends ApplicationService implements UserDetailsServ
                 .low_pwd(form.getPwd())
                 .pwd(passwordEncoder.encode(form.getPwd()))
                 .phone(form.getPhone())
+                .age(Calendar.getInstance().get(Calendar.YEAR) - age)
                 .build().toEntity());
         rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_SUCCESS); //성공
         return "redirect:/login";
@@ -95,8 +99,11 @@ public class MemberService extends ApplicationService implements UserDetailsServ
      * @return
      */
     @Transactional(readOnly = true)
-    public Page<MemberDto.Response> findAllDesc(Pageable pageable) {
-            return memberRepository.findAllDesc(pageable).map(MemberDto.Response::new);
+    public Page<MemberDto.Response> findAllDesc(Pageable pageable, int age) {
+            if(age == 0 ){
+                return memberRepository.findAll(pageable).map(MemberDto.Response::new);
+            }
+            return memberRepository.findAllDesc(pageable, age).map(MemberDto.Response::new);
     }
 
     /**

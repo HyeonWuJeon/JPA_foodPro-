@@ -3,11 +3,13 @@ package com.foodPro.demo.config;
 import com.foodPro.demo.config.filter.HeaderFilter;
 import com.foodPro.demo.config.interceptor.AuthInterceptor;
 import com.foodPro.demo.config.interceptor.JwtTokenInterceptor;
+import com.foodPro.demo.config.security.CustomAccessDeniedHandler;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -53,4 +55,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
     public AuthInterceptor authInterceptor() { return new AuthInterceptor();}
+
 }

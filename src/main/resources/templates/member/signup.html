@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/config :: configFragment"/>
+<header th:replace="fragments/head :: headerFragment"></header>
+
 <style>
     .fieldError {
         border-color: #bd2130;
     }
 </style>
 <body>
-<header th:replace="fragments/head :: headerFragment"></header>
-
+<head th:replace="fragments/config :: configFragment"/>
 <div class="limiter">
     <div class="container-login100" >
         <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
@@ -63,7 +63,7 @@
                                placeholder="우편번호" readonly required>
                         &nbsp;&nbsp;&nbsp;
                         <input type="button" onclick="sample6_execDaumPostcode()"
-                               class="btn btn-info" value="우편번호 검색"><br>
+                               class="btn btn-info" value="우편번호 검색">
                     </div>
                 </div>
 

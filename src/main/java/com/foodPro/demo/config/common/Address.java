@@ -1,9 +1,6 @@
 package com.foodPro.demo.config.common;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -11,6 +8,7 @@ import java.util.Objects;
 
 @Embeddable
 @Getter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
     @Column(name = "city")
     private String city;

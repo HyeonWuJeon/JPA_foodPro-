@@ -16,8 +16,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //LINE :: 회원 이메일 조회
     Optional<Member> findByEmail(String email);
 
+    @Query(value = "SELECT m FROM Member m where m.age > :age and m.age < :age+10 ORDER BY m.id DESC")
+    Page<Member> findAllDesc(Pageable pageable, int age);
+
     @Query(value = "SELECT m FROM Member m ORDER BY m.id DESC")
-    Page<Member> findAllDesc(Pageable pageable);
+    Page<Member> findAll(Pageable pageable);
 
     Optional<Member> findById(Long id);
 

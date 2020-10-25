@@ -27,6 +27,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class MemberServiceTest {
     static String name = "";
     static String pwd = "12345";
     static String phone = "0109259";
-    static String birth = "19951129";
+    static String birth = "1995-11-29";
     static String email = "yusa3@naver.com";
     static String city = "서울";
     static String zipcode = "330";
@@ -75,9 +76,13 @@ public class MemberServiceTest {
         //given
         Address address = new Address(city, zipcode, street);
         MemberDto.Request request = new MemberDto.Request();
+        int age = Integer.parseInt(birth.substring(0,4));
+        int year = Calendar.getInstance().get(Calendar.YEAR);
          request.builder()
                 .name(name)
                 .pwd(pwd)
+                .pwdChk(pwd)
+                 .low_pwd(pwd)
                 .email(email)
                 .birth(birth)
                 .phone(phone)
@@ -85,6 +90,7 @@ public class MemberServiceTest {
                 .city(city)
                 .street(street)
                 .role(role)
+                 .age(year - age)
                 .build();
         //when
         memberService.SignUp(request);

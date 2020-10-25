@@ -40,6 +40,7 @@ public class MemberDto {
         @Length(max = 11) @NotBlank(message = "휴대폰 번호를 확인해 주세요.:)")
         private String phone; // LINE :: 휴대폰 번호
 
+        private int age; // LINE :: 나이
         // LINE :: 주소
         @NotBlank(message = "주소를 확인해 주세요") private String city;
         @NotBlank(message = "주소를 확인해 주세요") private String zipcode;
@@ -77,7 +78,8 @@ public class MemberDto {
         private String birth; // LINE :: 생일
         private String phone; // LINE :: 휴대폰 번호
         private Address address; // LINE :: 주소
-        private Role role;
+        private Role role; // LINE :: 권한
+        private int age; // LINE :: 나이
 
         /**
          * CONSTRUCTOR :: 사용자 정보 조회
@@ -92,6 +94,7 @@ public class MemberDto {
             this.phone = entity.getPhone();
             this.birth = entity.getBirth();
             this.role = entity.getRole();
+            this.age = entity.getAge();
         }
 
         private Collection<? extends GrantedAuthority> authorities;
