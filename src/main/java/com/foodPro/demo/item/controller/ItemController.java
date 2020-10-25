@@ -42,13 +42,11 @@ public class ItemController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute("itemForm") @Valid ItemDto.Request request, BindingResult result){
+        System.out.println("request = " + request.toString());
         if(result.hasErrors()){
             return "item/new";
         }
         itemService.saveItem(request);
-        return "item/list";
+        return "redirect:/item/list";
     }
-
-
-
 }

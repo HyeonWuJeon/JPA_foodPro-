@@ -41,7 +41,7 @@ public class ItemService {
      * @return
      */
     public Page<ItemDto.Response> findAllDesc(Pageable pageable){
-
+         //책 / 음식 / 옷
         //LINE :: 검색기능 => 카테고리 + 페이징
         return itemRepository.findAllDesc(pageable).map(ItemDto.Response::new);
     }
