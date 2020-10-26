@@ -154,7 +154,7 @@ public class MemberService extends ApplicationService implements UserDetailsServ
         Workbook workBook = new SXSSFWorkbook();
         Sheet sheet = workBook.createSheet();
 
-        Page<MemberDto.Response> ExcelDto = memberRepository.findAll(pageable).map(MemberDto.Response::new);
+        Page<MemberDto.Excel> ExcelDto = memberRepository.findAll(pageable).map(MemberDto.Excel::new);
 
         // 헤더를 생성합니다
         int rowIndex = 0;
@@ -168,11 +168,14 @@ public class MemberService extends ApplicationService implements UserDetailsServ
         Cell headerCell3 = headerRow.createCell(2);
         headerCell3.setCellValue("이메일");
 
-        Cell headerCell4 = headerRow.createCell(2);
-        headerCell3.setCellValue("생일");
+        Cell headerCell4 = headerRow.createCell(3);
+        headerCell4.setCellValue("생일");
+
+        Cell headerCell5 = headerRow.createCell(4);
+        headerCell5.setCellValue("휴대폰번호");
 
         // 바디에 데이터를 넣어줍니다
-        for (MemberDto.Response dto : ExcelDto) {
+        for (MemberDto.Excel dto : ExcelDto) {
             Row bodyRow = sheet.createRow(rowIndex++);
 
             Cell bodyCell1 = bodyRow.createCell(0);
@@ -186,6 +189,9 @@ public class MemberService extends ApplicationService implements UserDetailsServ
 
             Cell bodyCell4 = bodyRow.createCell(3);
             bodyCell4.setCellValue(dto.getBirth());
+
+            Cell bodyCell5 = bodyRow.createCell(4);
+            bodyCell5.setCellValue(dto.getBirth());
         }
 
         workBook.write(response.getOutputStream());

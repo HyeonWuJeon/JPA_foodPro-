@@ -147,4 +147,26 @@ public class MemberDto {
             return true;
         }
     }
+
+    @Getter
+    @ToString
+    public static class Excel {
+        private String name; // LINE :: 이름
+        private String email; // LINE :: 이메일
+        private String birth; // LINE :: 생일
+        private String phone; // LINE :: 휴대폰 번호
+        private int age; // LINE :: 나이
+
+        /**
+         * Excel :: 사용자 정보 저장
+         * @param entity
+         */
+        public Excel(Member entity) {
+            this.name = entity.getName();
+            this.email = entity.getEmail();
+            this.phone = entity.getPhone();
+            this.birth = entity.getBirth();
+            this.age = entity.getAge();
+        }
+    }
 }
