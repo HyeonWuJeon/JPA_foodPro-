@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RequestMapping("/admin")
 @Controller
 //@RequiredArgsConstructor
@@ -55,5 +59,14 @@ public class AdminApiController {
         MemberDto.Response dto = memberService.findById(id);
         model.addAttribute("member", dto);
         return "member/settings";
+    }
+
+    /**
+     * 사용자 개인 정보 조회
+     */
+    @GetMapping("/excel")
+    public void excel(HttpServletResponse response, Pageable pageable) throws IOException {
+        memberService.ExcelDown(response,pageable);
+
     }
 }

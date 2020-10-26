@@ -8,6 +8,11 @@ import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,9 +22,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Service("memberService")
@@ -27,8 +36,10 @@ import java.util.HashMap;
 public class MemberService extends ApplicationService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+
     /**
      * FUNCTION :: 회원가입
+     *
      * @param form
      * @return
      */
@@ -39,9 +50,9 @@ public class MemberService extends ApplicationService implements UserDetailsServ
         // LINE :: 아이디 중복검사
         validateDuplicateMember(form.getEmail());
         // LINE :: 패스워드 일치검사
-        passwordSameChk(form.getPwd(),form.getPwdChk());
+        passwordSameChk(form.getPwd(), form.getPwdChk());
         // LINE :: 나이
-        int age = Integer.parseInt(form.getBirth().substring(0,4));
+        int age = Integer.parseInt(form.getBirth().substring(0, 4));
         // LINE :: 저장 + 유효성 검사
         memberRepository.save(new MemberDto.Request().builder()
                 .name(form.getName())
@@ -59,55 +70,60 @@ public class MemberService extends ApplicationService implements UserDetailsServ
 
     /**
      * FUNCTION :: 아이디 중복검사
+     *
      * @param userEmail
      * @return
      */
     @Transactional(readOnly = true)
     public void validateDuplicateMember(String userEmail) {
-            if (memberRepository.findByEmail(userEmail).isPresent()) {
-                throw new MemberDuplicationException("회원 중복 오류");
+        if (memberRepository.findByEmail(userEmail).isPresent()) {
+            throw new MemberDuplicationException("회원 중복 오류");
         }
     }
 
     /**
      * FUNCTION :: 패스워드 일치 검사
+     *
      * @return
      */
     @Transactional(readOnly = true)
     public void passwordSameChk(String pwd, String pwdChk) {
-        System.out.println("pwd +\"  ? \"+ pwdChk = " + pwd +"  ? "+ pwdChk);
-      if(pwd.equals(pwdChk)){
-          throw new IllegalArgumentException("패스워드 일치하지 않음");
-      }
+        System.out.println("pwd +\"  ? \"+ pwdChk = " + pwd + "  ? " + pwdChk);
+        if (pwd.equals(pwdChk)) {
+            throw new IllegalArgumentException("패스워드 일치하지 않음");
+        }
     }
 
     /**
      * FUNCTION :: 인증절차
+     *
      * @param userEmail
      * @return
      * @throws UsernameNotFoundException
      */
     @Override
-    public MemberDto.Response loadUserByUsername(String userEmail) throws UsernameNotFoundException{
-        return  memberRepository.findByEmail(userEmail).map(u ->
+    public MemberDto.Response loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        return memberRepository.findByEmail(userEmail).map(u ->
                 new MemberDto.Response(u, Collections.singleton(new SimpleGrantedAuthority(u.getRole().getValue())))).orElseThrow(()
                 -> new UserNotFoundException(userEmail));
     }
 
     /**
      * FUNCTION :: 회원 전체 조회
+     *
      * @return
      */
     @Transactional(readOnly = true)
     public Page<MemberDto.Response> findAllDesc(Pageable pageable, int age) {
-            if(age == 0 ){
-                return memberRepository.findAll(pageable).map(MemberDto.Response::new);
-            }
-            return memberRepository.findAllDesc(pageable, age).map(MemberDto.Response::new);
+        if (age == 0) {
+            return memberRepository.findAll(pageable).map(MemberDto.Response::new);
+        }
+        return memberRepository.findAllDesc(pageable, age).map(MemberDto.Response::new);
     }
 
     /**
      * FUNCTION :: 회원 개별 조회
+     *
      * @param id
      * @return
      */
@@ -121,6 +137,7 @@ public class MemberService extends ApplicationService implements UserDetailsServ
 
     /**
      * FUNCTION :: 회원 수정
+     *
      * @param id
      * @param requestDto
      * @return
@@ -133,4 +150,47 @@ public class MemberService extends ApplicationService implements UserDetailsServ
         return id;
     }
 
+    public void ExcelDown(HttpServletResponse response, Pageable pageable) throws IOException {
+        Workbook workBook = new SXSSFWorkbook();
+        Sheet sheet = workBook.createSheet();
+
+        Page<MemberDto.Response> ExcelDto = memberRepository.findAll(pageable).map(MemberDto.Response::new);
+
+        // 헤더를 생성합니다
+        int rowIndex = 0;
+        Row headerRow = sheet.createRow(rowIndex++);
+        Cell headerCell1 = headerRow.createCell(0);
+        headerCell1.setCellValue("이름");
+
+        Cell headerCell2 = headerRow.createCell(1);
+        headerCell2.setCellValue("나이");
+
+        Cell headerCell3 = headerRow.createCell(2);
+        headerCell3.setCellValue("이메일");
+
+        Cell headerCell4 = headerRow.createCell(2);
+        headerCell3.setCellValue("생일");
+
+        // 바디에 데이터를 넣어줍니다
+        for (MemberDto.Response dto : ExcelDto) {
+            Row bodyRow = sheet.createRow(rowIndex++);
+
+            Cell bodyCell1 = bodyRow.createCell(0);
+            bodyCell1.setCellValue(dto.getName());
+
+            Cell bodyCell2 = bodyRow.createCell(1);
+            bodyCell2.setCellValue(dto.getAge());
+
+            Cell bodyCell3 = bodyRow.createCell(2);
+            bodyCell3.setCellValue(dto.getEmail());
+
+            Cell bodyCell4 = bodyRow.createCell(3);
+            bodyCell4.setCellValue(dto.getBirth());
+        }
+
+        workBook.write(response.getOutputStream());
+        workBook.close();
+    }
+
 }
+
