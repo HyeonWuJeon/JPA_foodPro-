@@ -67,6 +67,5 @@ public class AdminApiController {
     @GetMapping("/excel")
     public void excel(HttpServletResponse response, Pageable pageable) throws IOException {
         memberService.ExcelDown(response,pageable);
-
     }
 }

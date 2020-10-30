@@ -8,10 +8,7 @@ import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +36,6 @@ public class MemberService extends ApplicationService implements UserDetailsServ
 
     /**
      * FUNCTION :: 회원가입
-     *
      * @param form
      * @return
      */
@@ -156,6 +152,19 @@ public class MemberService extends ApplicationService implements UserDetailsServ
 
         Page<MemberDto.Excel> ExcelDto = memberRepository.findAll(pageable).map(MemberDto.Excel::new);
 
+        /**
+         * 디자인 입히기
+         */
+//        CellStyle greyCellStyle = workBook.createCellStyle();
+//        greyCellStyle.app(greyCellStyle, new Color(231, 234, 236));
+//
+//        CellStyle blueCellStyle = workbook.createCellStyle();
+//        applyCellStyle(blueCellStyle, new Color(223, 235, 246));
+//
+//        CellStyle bodyCellStyle = workbook.createCellStyle();
+//        applyCellStyle(bodyCellStyle, new Color(255, 255, 255));
+
+        String fileName = "TEST.xlsx";
         // 헤더를 생성합니다
         int rowIndex = 0;
         Row headerRow = sheet.createRow(rowIndex++);
@@ -194,8 +203,15 @@ public class MemberService extends ApplicationService implements UserDetailsServ
             bodyCell5.setCellValue(dto.getBirth());
         }
 
+        response.setContentType("application/download;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
+        response.setHeader("Content-Transfer-Encoding", "binary");
+
         workBook.write(response.getOutputStream());
+
+
         workBook.close();
+        response.getOutputStream().close();
     }
 
 }

@@ -3,6 +3,11 @@ package com.foodPro.demo.config.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTColor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +82,17 @@ public class ApplicationService {
 //    public void ExcelDown(){
 //
 //    }
+
+    private void applyCellStyle(CellStyle cellStyle, Color color) {
+        XSSFCellStyle xssfCellStyle = (XSSFCellStyle) cellStyle;
+        xssfCellStyle.setFillForegroundColor(new XSSFColor((CTColor) color, new DefaultIndexedColorMap()));
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+    }
 
 }
