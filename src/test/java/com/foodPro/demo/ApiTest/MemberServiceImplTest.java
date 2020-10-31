@@ -7,29 +7,19 @@ import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
-import com.foodPro.demo.member.service.MemberService;
+import com.foodPro.demo.member.service.MemberServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
 
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -38,10 +28,10 @@ import static org.junit.Assert.fail;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class MemberServiceTest {
+public class MemberServiceImplTest {
 
     @Autowired
-    private MemberService memberService;
+    private MemberServiceImpl memberServiceImpl;
     @Autowired
     private MemberRepository memberRepository;
 
@@ -93,7 +83,7 @@ public class MemberServiceTest {
                  .age(year - age)
                 .build();
         //when
-        memberService.SignUp(request);
+        memberServiceImpl.SignUp(request);
         //then
         Member member = memberRepository.findById(1L).get();
         assertThat(member.getName()).isEqualTo(name);
@@ -103,7 +93,7 @@ public class MemberServiceTest {
     @Test(expected = MemberDuplicationException.class)
     public void 이메일_중복검사(){
 
-        memberService.validateDuplicateMember(email);
+        memberServiceImpl.validateDuplicateMember(email);
 
     }
 
@@ -118,7 +108,7 @@ public class MemberServiceTest {
                 .zipcode(address.getZipcode())
                 .phone("01012341234")
                 .build();
-        memberService.update(1L, request);
+        memberServiceImpl.update(1L, request);
 
         Member member = memberRepository.findById(1L).get();
         assertThat(member.getAddress().getCity()).isEqualTo("경기도");

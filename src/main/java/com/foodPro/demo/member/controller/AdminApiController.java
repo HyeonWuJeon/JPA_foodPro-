@@ -4,9 +4,7 @@ import com.foodPro.demo.config.common.pagging.PageWrapper;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/admin")
 @Controller
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class AdminApiController {
 
-//    private final MemberService memberService;
-
-
-    @Autowired @Qualifier("memberService")
-    private  MemberService memberService;
+    @Qualifier("memberService") // LINE :: 의존객체가 여러개일 경우 설정.
+    private final MemberService memberService;
 
     /**
      * 사용자 정보 조회

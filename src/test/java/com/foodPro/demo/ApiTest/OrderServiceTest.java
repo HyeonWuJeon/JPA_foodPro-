@@ -3,21 +3,16 @@ package com.foodPro.demo.ApiTest;
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.exception.NotEnoughStockException;
 import com.foodPro.demo.config.security.Role;
-import com.foodPro.demo.item.domain.Item;
-import com.foodPro.demo.item.domain.item.Book;
-import com.foodPro.demo.item.domain.item.Food;
 import com.foodPro.demo.item.dto.ItemDto;
-import com.foodPro.demo.item.repository.ItemRepository;
 import com.foodPro.demo.item.service.ItemService;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
-import com.foodPro.demo.member.service.MemberService;
+import com.foodPro.demo.member.service.MemberServiceImpl;
 import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderStatus;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.repository.OrderRepository;
 import com.foodPro.demo.order.service.OrderService;
-import javafx.scene.control.Pagination;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +35,8 @@ import static org.springframework.test.util.AssertionErrors.fail;
 public class OrderServiceTest {
 
     @Autowired OrderService orderService;
-    @Autowired MemberService memberService;
+    @Autowired
+    MemberServiceImpl memberServiceImpl;
     @Autowired OrderRepository orderRepository;
     @Autowired ItemService itemService;
 
@@ -71,7 +65,7 @@ public class OrderServiceTest {
         Address address = new Address(city, zipcode, street);
         MemberDto.Request request = new MemberDto.Request();
         request.setPwdChk(pwd);
-        memberService.SignUp(request.builder()
+        memberServiceImpl.SignUp(request.builder()
                 .name(name)
                 .pwd(pwd)
                 .email(email)
@@ -100,7 +94,7 @@ public class OrderServiceTest {
         //given
         Member member1 = em.find(Member.class, 1L);
         System.out.println("member1.toString() = " + member1.toString());
-        MemberDto.Response member = memberService.findById(1L);
+        MemberDto.Response member = memberServiceImpl.findById(1L);
         ItemDto.Response item = itemService.findById(1L);
 
         int orderCount = 2;
@@ -172,7 +166,7 @@ public class OrderServiceTest {
     @Test(expected = NotEnoughStockException.class)
     public void 상품주문초과() throws Exception{
         //given
-        MemberDto.Response member = memberService.findById(1L);
+        MemberDto.Response member = memberServiceImpl.findById(1L);
         ItemDto.Response item = itemService.findById(33L);
         int orderCount = 11;
         //when
@@ -184,7 +178,7 @@ public class OrderServiceTest {
     @Test
     public void 주문취소() {
         //given
-        MemberDto.Response member = memberService.findById(1L);
+        MemberDto.Response member = memberServiceImpl.findById(1L);
         ItemDto.Response item = itemService.findById(33L);
 
         int orderCount= 2;
