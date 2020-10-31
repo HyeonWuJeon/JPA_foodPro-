@@ -50,14 +50,14 @@
     ) engine=InnoDB;
 
 
-     create table catagory (
+     create table if not catagory (
        catagory_id bigint not null auto_increment,
         name varchar(255),
         parent_id bigint,
         primary key (catagory_id)
     ) engine=InnoDB
 
-    create table catagory_item (
+    create table if not catagory_item (
        order_food_id bigint not null auto_increment,
         create_date datetime(6),
         modified_date datetime(6),
@@ -78,7 +78,7 @@
 
 
 
-     create table order_item (
+     create table if not exists order_item (
        order_food_id bigint not null auto_increment,
         create_date datetime(6),
         modified_date datetime(6),
@@ -89,7 +89,7 @@
         primary key (order_food_id)
     ) engine=InnoDB;
 
-      create table orders (
+      create table if not exists orders (
        order_id bigint not null auto_increment,
         create_date datetime(6),
         modified_date datetime(6),
@@ -150,7 +150,7 @@ alter table orders
        foreign key (member_id)
        references member (member_id)
 
-CREATE TABLE SPRING_SESSION (
+CREATE TABLE if not exists SPRING_SESSION (
 	PRIMARY_ID CHAR(36) NOT NULL,
 	SESSION_ID CHAR(36) NOT NULL,
 	CREATION_TIME BIGINT NOT NULL,
@@ -165,7 +165,7 @@ CREATE UNIQUE INDEX SPRING_SESSION_IX1 ON SPRING_SESSION (SESSION_ID);
 CREATE INDEX SPRING_SESSION_IX2 ON SPRING_SESSION (EXPIRY_TIME);
 CREATE INDEX SPRING_SESSION_IX3 ON SPRING_SESSION (PRINCIPAL_NAME);
 
-CREATE TABLE SPRING_SESSION_ATTRIBUTES (
+CREATE TABLE if not exists SPRING_SESSION_ATTRIBUTES (
 	SESSION_PRIMARY_ID CHAR(36) NOT NULL,
 	ATTRIBUTE_NAME VARCHAR(200) NOT NULL,
 	ATTRIBUTE_BYTES LONGVARBINARY NOT NULL,
