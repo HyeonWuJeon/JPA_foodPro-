@@ -27,11 +27,11 @@ public class ItemService {
     public void saveItem(ItemDto.Request request){
 
         switch (request.getGubun()){
-            case "B": itemRepository.save(request.Book_toEntity()); // LINE :: 도서 저장
+            case "Book": itemRepository.save(request.Book_toEntity()); // LINE :: 도서 저장
             break;
-            case "F": itemRepository.save(request.Food_toEntity()); // LINE :: 음식 저장
+            case "Food": itemRepository.save(request.Food_toEntity()); // LINE :: 음식 저장
             break;
-            case "C": itemRepository.save(request.Clothes_toEntity()); // LINE :: 옷 저장
+            case "Clothes": itemRepository.save(request.Clothes_toEntity()); // LINE :: 옷 저장
         }
 
     }
