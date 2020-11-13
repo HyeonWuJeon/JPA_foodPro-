@@ -3,11 +3,8 @@
         city varchar(255) not null,
         street varchar(255) not null,
         zipcode varchar(255) not null,
-        birth varchar(255) not null,
         email varchar(255) not null UNIQUE,
         low_pwd varchar(255) not null,
-        name varchar(255) not null,
-        phone varchar(255) not null,
         pwd varchar(255) not null,
         role varchar(255) not null,
         primary key (member_id)
