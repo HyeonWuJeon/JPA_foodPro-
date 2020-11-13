@@ -1,9 +1,9 @@
 
 spring:
-  datasource:
+#  datasource:
 #    url: jdbc:h2:mem:foodPro
-  jpa:
-    show-sql: true
+#  jpa:
+#    show-sql: true
 
 logging.level:
   org.hibernate.SQL: info

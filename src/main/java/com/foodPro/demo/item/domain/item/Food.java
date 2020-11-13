@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 @Entity
 @Getter
 @Setter // Test
-@DiscriminatorValue("F")
+@DiscriminatorValue("")
 public class Food extends Item {
     private String expirationDate; // LINE :: 유통기한
 

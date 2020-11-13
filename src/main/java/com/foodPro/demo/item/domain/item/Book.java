@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Getter
-@DiscriminatorValue("B")
+@DiscriminatorValue("")
 public class Book extends Item {
     private String author;
 

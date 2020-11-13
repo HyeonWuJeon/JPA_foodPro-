@@ -1,5 +1,6 @@
 package com.foodPro.demo.ApiTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.exception.NotEnoughStockException;
 import com.foodPro.demo.config.security.Role;
@@ -13,14 +14,19 @@ import com.foodPro.demo.order.domain.OrderStatus;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.repository.OrderRepository;
 import com.foodPro.demo.order.service.OrderService;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -28,67 +34,64 @@ import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class OrderServiceTest {
 
     @Autowired OrderService orderService;
-    @Autowired
-    MemberServiceImpl memberServiceImpl;
+    @Autowired MemberServiceImpl memberServiceImpl;
     @Autowired OrderRepository orderRepository;
     @Autowired ItemService itemService;
+
+    @LocalServerPort
+    private int port;
 
     @PersistenceContext
     EntityManager em;
 
+    private MockMvc mvc;
+
     //given
-    static String name = "";
     static String pwd = "123451111111111111111111111";
-    static String phone = "0109259";
-    static String birth = "19951129";
     static String email = "yusa3@naver.com";
     static String city = "서울";
     static String zipcode = "330";
     static String street = "용마산로";
-    static Role role = Role.ADMIN;
 
     static String bookname = "나미야잡화점";
     static int price = 10000;
     static int stock = 22;
     static String author = "히가시노게이고";
 
-    public void common() {
-
-        //given
-        Address address = new Address(city, zipcode, street);
-        MemberDto.Request request = new MemberDto.Request();
-        request.setPwdChk(pwd);
-        memberServiceImpl.SignUp(request.builder()
-                .name(name)
-                .pwd(pwd)
-                .email(email)
-                .birth(birth)
-                .phone(phone)
-                .zipcode(zipcode)
-                .city(city)
-                .street(street)
-                .role(role)
-                .build());
-
-
-        ItemDto.Request request2 = new ItemDto.Request();
-        request2.setPrice(price);
-        request2.setName(bookname);
-        request2.setAuthor(author);
-        request2.setGubun("B");
-        request2.setStockQuantity(stock);
-
-
-        itemService.saveItem(request2);
-
-    }
+//    @Before
+//    public void common() {
+//
+//        //given
+//        Address address = new Address(city, zipcode, street);
+//
+//        memberServiceImpl.
+//                SignUp(MemberDto.Request.builder()
+//                .pwd(pwd)
+//                .email(email)
+//                .zipcode(zipcode)
+//                .city(city)
+//                .street(street)
+//                .build());
+//
+//        ItemDto.Request request2 = new ItemDto.Request();
+//        request2.setPrice(price);
+//        request2.setName(bookname);
+//        request2.setAuthor(author);
+//        request2.setGubun("Book");
+//        request2.setStockQuantity(stock);
+//
+//        itemService.saveItem(request2);
+//
+//    }
     @Test
     public void 상품주문() throws Exception{
         //given
@@ -110,8 +113,7 @@ public class OrderServiceTest {
 
     @Test
     public void 조회() throws Exception{
-        common();
-        상품주문();
+
         Pageable pageable = new Pageable() {
             @Override
             public int getPageNumber() {
@@ -193,6 +195,25 @@ public class OrderServiceTest {
 
         assertEquals("주문 취소상태 는 CANCLE 이다.", OrderStatus.CANCLE, getOrder.getOrderStatus());
         assertEquals("주문 재고가 증가해야한다.", 2, item.getStockQuantity());
+
+    }
+
+
+    /**
+     * Exception 테스트
+     */
+    @Test
+    public void 주문예외처리() {
+
+            // 회원 없는 상태에서 주문.
+        String url = "http://localhost:" + port + "/api/v1/posts";
+
+        //when
+//        mvc.perform(post(url)
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//                .content(new ObjectMapper().writeValueAsString(1L, 1L, 1L)))
+//                .andExpect(status().isOk());
+
 
     }
 }

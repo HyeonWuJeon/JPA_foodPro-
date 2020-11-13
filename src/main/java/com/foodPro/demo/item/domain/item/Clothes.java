@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 
 @Entity
 @Getter
-@DiscriminatorValue("C")
+@DiscriminatorValue("")
 public class Clothes extends Item {
     private String size; // LINE :: 옷 사이즈
 

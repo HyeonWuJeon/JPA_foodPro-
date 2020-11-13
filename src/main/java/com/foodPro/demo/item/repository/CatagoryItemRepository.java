@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface CatagoryItemRepository extends JpaRepository<CatagoryItem, Long> {
 
-    @Query("SELECT distinct c FROM CatagoryItem c join c.item")
+    @Query("SELECT distinct c FROM CatagoryItem c inner join c.item")
     Page<CatagoryItem> findAllDesc(Pageable pageable);
 }
