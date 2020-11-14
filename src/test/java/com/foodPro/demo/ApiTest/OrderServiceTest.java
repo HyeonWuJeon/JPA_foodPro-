@@ -92,24 +92,7 @@ public class OrderServiceTest {
 //        itemService.saveItem(request2);
 //
 //    }
-    @Test
-    public void 상품주문() throws Exception{
-        //given
-        Member member1 = em.find(Member.class, 1L);
-        System.out.println("member1.toString() = " + member1.toString());
-        MemberDto.Response member = memberServiceImpl.findById(1L);
-        ItemDto.Response item = itemService.findById(1L);
 
-        int orderCount = 2;
-        //when
-        Long orderId = orderService.save(member.getId(),item.getId(), orderCount);
-        //then
-        Order getOrder = orderRepository.findById(1L).get();
-        assertEquals("상품 주문시 주문 상태는 ORDER이여야 한다.", OrderStatus.ORDER, getOrder.getOrderStatus());
-        assertEquals("주문한 상품 종류수는 1 개 여야 한다.", 1, getOrder.getOrderItemList().size());
-        assertEquals("주문 가격은 가격 * 수량이다.", 10000 * orderCount, getOrder.getTotalPrice());
-//        assertEquals("주문 수량만큼 재고가 줄어야된다.",6, item.getStockQuantity());
-    }
 
     @Test
     public void 조회() throws Exception{

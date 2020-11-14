@@ -18,51 +18,50 @@ import java.util.Set;
 public class MemberDto {
 
     @Data
-    @AllArgsConstructor //LINE :: Address 필드 포함 생성자주입
-    @Builder
+    //UNIT TEST 어노테이션
+    @NoArgsConstructor
     public static class Request{
-        @Length(max = 15) @NotBlank(message = "회원 이름을 확인해 주세요.:)")
-        private String name; // LINE :: 이름
 
         @Length(max = 200) @NotBlank(message = "패스워드를 확인해 주세요.:)") @Pattern(regexp = "[0-9]{5,10}", message = "5~10자리의 숫자만 입력가능합니다")
         private String pwd; // LINE :: 패스워드
         private String low_pwd; // LINE :: 패스워드
+
         @Length(max = 200)
         private String pwdChk; // LINE :: 패스워드
 
         @Length(max = 200) @NotBlank(message = "이메일을 확인해 주세요.:)")
         private String email; // LINE :: 이메일
 
-        @Length(max = 11) @NotBlank(message = "생일을 확인해 주세요.:)")
+        private Role role;
 
-        private String birth; // LINE :: 생일
+        private Address address;
 
-        @Length(max = 11) @NotBlank(message = "휴대폰 번호를 확인해 주세요.:)")
-        private String phone; // LINE :: 휴대폰 번호
-
-        private int age; // LINE :: 나이
         // LINE :: 주소
         @NotBlank(message = "주소를 확인해 주세요") private String city;
         @NotBlank(message = "주소를 확인해 주세요") private String zipcode;
         @NotBlank(message = "주소를 확인해 주세요") private String street;
 
-        private Address address;
 
-        // LINE :: 권한
-        private Role role;
+        @Builder
+        public Request( Role role, @Length(max = 200) @NotBlank(message = "패스워드를 확인해 주세요.:)") @Pattern(regexp = "[0-9]{5,10}", message = "5~10자리의 숫자만 입력가능합니다") String pwd, String low_pwd, @Length(max = 200) String pwdChk, @Length(max = 200) @NotBlank(message = "이메일을 확인해 주세요.:)") String email,  @NotBlank(message = "주소를 확인해 주세요") String city, @NotBlank(message = "주소를 확인해 주세요") String zipcode, @NotBlank(message = "주소를 확인해 주세요") String street, Address address) {
+            this.pwd = pwd;
+            this.low_pwd = low_pwd;
+            this.pwdChk = pwdChk;
+            this.email = email;
+            this.city = city;
+            this.zipcode = zipcode;
+            this.street = street;
+            this.address =address;
+            this.role =role;
 
-        public Request() {
         }
 
         public Member toEntity() {
             return Member.builder()
-                    .name(name)
                     .email(email)
                     .pwd(pwd)
-                    .birth(birth)
-                    .phone(phone)
-                    .address(address)
-                    .role(Role.GUEST)
+                    .address(new Address(city, zipcode, street))
+                    .role(Role.ADMIN)
                     .low_pwd(low_pwd)
                     .build();
         }
@@ -72,14 +71,10 @@ public class MemberDto {
     @ToString
     public static class Response implements UserDetails {
         private Long id;
-        private String name; // LINE :: 이름
         private String pwd; // LINE :: 패스워드
         private String email; // LINE :: 이메일
-        private String birth; // LINE :: 생일
-        private String phone; // LINE :: 휴대폰 번호
         private Address address; // LINE :: 주소
         private Role role; // LINE :: 권한
-        private int age; // LINE :: 나이
 
         /**
          * CONSTRUCTOR :: 사용자 정보 조회
@@ -87,14 +82,10 @@ public class MemberDto {
          */
         public Response(Member entity) {
             this.id = entity.getId();
-            this.name = entity.getName();
             this.email = entity.getEmail();
             this.pwd = entity.getPwd();
             this.address = entity.getAddress();
-            this.phone = entity.getPhone();
-            this.birth = entity.getBirth();
             this.role = entity.getRole();
-            this.age = entity.getAge();
         }
 
         private Collection<? extends GrantedAuthority> authorities;
@@ -124,7 +115,7 @@ public class MemberDto {
 
         @Override
         public String getUsername() {
-            return this.getName();
+            return this.getEmail();
         }
 
         @Override

@@ -12,8 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
@@ -23,25 +21,13 @@ public class Member {
     private Long id;
 
     @Column
-    private String name; // LINE :: 이름
-
-    @Column
-    private int age;
+    private String email; // LINE :: 이메일 , UNIQUE 제약조건
 
     @Column
     private String pwd; // LINE :: 패스워드
 
     @Column
     private String low_pwd; // LINE :: 패스워드
-
-    @Column
-    private String email; // LINE :: 이메일 , UNIQUE 제약조건
-
-    @Column
-    private String birth; // LINE :: 생일
-
-    @Column
-    private String phone; // LINE :: 휴대폰 번호
 
     @Enumerated(EnumType.STRING)
     private Role role;          //LINE :: ADMIN : 관리자 / GUEST : 사용자
@@ -57,22 +43,17 @@ public class Member {
      * 회원 가입
      */
     @Builder
-    public Member(String name, Address address, String email, String pwd, String birth, String phone,Role role,String low_pwd, int age) {
-        this.name = name;
+    public Member( String email, Address address,String pwd,Role role,String low_pwd) {
         this.address = address;
         this.email = email;
         this.pwd = pwd;
-        this.birth = birth;
-        this.phone = phone;
         this.role = role;
         this.low_pwd = low_pwd;
-        this.age = age;
     }
 
     // 비지니스 로직 :: 회원 정보 수정
-    public Member update(String city, String street, String zipcode, String phone) {
+    public Member update(String city, String street, String zipcode) {
         this.address = new Address(city, zipcode, street);
-        this.phone = phone;
         return this;
     }
 
