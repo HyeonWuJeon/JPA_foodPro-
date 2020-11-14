@@ -28,14 +28,12 @@ public class AdminApiController {
      * @return
      */
     @GetMapping("/list")
-    public String findAllDesc(Model model, @PageableDefault(size = 5) Pageable pageable, @RequestParam(value="age", defaultValue = "0") int age) {
+    public String findAllDesc(Model model, @PageableDefault(size = 5) Pageable pageable) {
 
-        Page<MemberDto.Response> responses = memberService.findAllDesc(pageable, age);
+        Page<MemberDto.Response> responses = memberService.findAllDesc(pageable);
 
         PageWrapper<MemberDto.Response> page = new PageWrapper<>(responses, "/admin/list");
 
-        System.out.println("age = " + age);
-        model.addAttribute("age",age);
         model.addAttribute("page", page);
         model.addAttribute("list", responses);
 
@@ -46,7 +44,7 @@ public class AdminApiController {
      * 사용자 개인 정보 조회
      */
     @GetMapping("/member/settings/{id}")
-    public String updateMember(@PathVariable Long id, Model model) {
+    public String updateMember(@PathVariable Long id, Model model) throws Exception {
         MemberDto.Response dto = memberService.findById(id);
         model.addAttribute("member", dto);
         return "member/settings";

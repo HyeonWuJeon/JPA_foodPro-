@@ -1,4 +1,4 @@
-package com.foodPro.demo.ApiTest;
+package com.foodPro.demo.unitTest;
 
 
 import com.foodPro.demo.config.common.Address;
@@ -8,6 +8,7 @@ import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import com.foodPro.demo.member.service.MemberServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +16,30 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.constraints.Null;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@Transactional
-//@AutoConfigureMockMvc
-public class MemberServiceImplTest {
 
-//    @Autowired
-    @MockBean
+@SpringBootTest
+@Transactional
+public class MemberServiceTest {
+
+    @Autowired
     private MemberServiceImpl memberServiceImpl;
+
     @MockBean
     private MemberRepository memberRepository;
 
@@ -46,33 +50,54 @@ public class MemberServiceImplTest {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    WebTestClient webTestClient;
+
+
 
 
     //given
-    static String name = "";
     static String pwd = "12345";
-    static String phone = "0109259";
-    static String birth = "1995-11-29";
     static String email = "yusa10@naver.com";
     static String city = "서울";
     static String zipcode = "330";
     static String street = "용마산로";
 
+//    @Before
+//    public void Before(){
+//        Address address = new Address(city, zipcode, street);
+//        MemberDto.Request request = new MemberDto.Request();
+//        memberServiceImpl.SignUp(request.builder()
+//                .pwd(pwd)
+//                .pwdChk(pwd)
+//                .low_pwd(pwd)
+//                .email(email)
+//                .zipcode(address.getZipcode())
+//                .city(address.getCity())
+//                .street(address.getStreet())
+//                .role(Role.ADMIN)
+//                .build());
+//    }
+    /**
+     * 비지니스로직 UNIT TEST
+     * 1. 조회
+     */
     @Test
-    public void 회원조회(){
-//        Page<Member> List = memberService.findAllDesc(Pageable.unpaged());
-//        System.out.println("List = " + List);
-//
-//        for (Member member : List){
-//            System.out.println("member.toString() = " + member.toString());
-//        }
+    public void 조회(){
+
+        //when
+        Page<MemberDto.Response> List = memberServiceImpl.findAllDesc(Pageable.unpaged());
+        System.out.println("List = " + List);
+
+        for (MemberDto.Response member : List){
+            System.out.println("member.toString() = " + member.toString());
+        }
     }
 
+    /**
+     * 2. 저장
+     */
     @Test
     @Rollback(false)
-    public void 회원가입(){
+    public void 저장(){
         //given
         Address address = new Address(city, zipcode, street);
         MemberDto.Request request = new MemberDto.Request();
@@ -93,17 +118,12 @@ public class MemberServiceImplTest {
         assertThat(member.getEmail()).isEqualTo(email);
     }
 
-
-    @Test(expected = MemberDuplicationException.class)
-    public void 이메일_중복검사(){
-
-        memberServiceImpl.validateDuplicateMember(email);
-
-    }
-
+    /**
+     * 수정
+     */
     @Test
     @Rollback(false)
-    public void 회원수정(){
+    public void 수정(){
         //given
         Address address = new Address("경기도", "광명", "00동");
         //when
@@ -119,10 +139,40 @@ public class MemberServiceImplTest {
 
     }
 
+    /**
+     * 삭제 -- 성공
+     */
+    @Test(expected = NullPointerException.class)
+
+    public void 삭제() {
+        memberServiceImpl.delete(1L);
+        //then
+        Member memberEntity = memberRepository.findById(1L).orElseThrow(()-> new NullPointerException("null"));
+    }
+
+    /**
+     * 예외처리 테스트
+     * 1. 중복 검사 -- 성공
+     */
+    @Test(expected = MemberDuplicationException.class)
+    public void 이메일_중복검사(){
+
+        //given
+        String email = "yusa3@naver.com";
+        //when
+        memberServiceImpl.validateDuplicateMember(email);
+    }
+
+
+
+    /**
+     * 회원 조회 오류
+     * 2. 조회 NPE -- 성공
+     */
     //https://jojoldu.tistory.com/226 참고
     //https://stackoverflow.com/questions/38881233/java-test-with-expected-exception-fails-with-assertion-error assertError 해결
     @Test(expected = IllegalArgumentException.class)
-    public void 조회예외처리테스트() throws Exception {
+    public void 조회NPE() throws Exception {
         //given
         Long id = 1L;
         given(memberRepository.findById(id))
@@ -133,15 +183,37 @@ public class MemberServiceImplTest {
 
     }
 
-    @Test
-    public void GlobalException() {
+    /**
+     * 수정 NPE -- 성공
+     * @throws Exception
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void 수정NPE() throws Exception {
+
         //given
         Long id = 1L;
-        given(memberServiceImpl.findById(id))
-                .willReturn(null);
+        given(memberRepository.findById(id))
+                .willReturn(Optional.empty());
 
         //when
-        webTestClient.get().uri("/member/settings/1").exchange()
-                .expectStatus().is4xxClientError();
+        memberServiceImpl.update(id, MemberDto.Request.builder().email(email).build());
+
     }
+
+    /**
+     * 삭제 NPE -- 성공
+     * @throws Exception
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void 삭제NPE() throws Exception {
+
+        //given
+        Long id = 1L;
+        given(memberRepository.findById(id))
+                .willReturn(Optional.empty());
+
+        //when
+        memberServiceImpl.delete(id);
+    }
+
 }
