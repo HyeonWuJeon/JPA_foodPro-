@@ -3,36 +3,31 @@ package com.foodPro.demo.unitTest;
 
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.exception.MemberDuplicationException;
+import com.foodPro.demo.config.exception.PasswordMissmatchException;
+import com.foodPro.demo.config.exception.UserNotFoundException;
 import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import com.foodPro.demo.member.service.MemberServiceImpl;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.constraints.Null;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class MemberServiceTest {
@@ -42,17 +37,6 @@ public class MemberServiceTest {
 
     @MockBean
     private MemberRepository memberRepository;
-
-
-    @PersistenceContext
-    EntityManager em;
-
-    @LocalServerPort
-    private int port;
-
-
-
-
 
     //given
     static String pwd = "12345";
@@ -96,14 +80,12 @@ public class MemberServiceTest {
      * 2. 저장
      */
     @Test
-    @Rollback(false)
     public void 저장(){
         //given
         Address address = new Address(city, zipcode, street);
-        MemberDto.Request request = new MemberDto.Request();
 
         //when
-        Long id = memberServiceImpl.SignUp(request.builder()
+        Long id = memberServiceImpl.SignUp(MemberDto.Request.builder()
                 .pwd(pwd)
                 .pwdChk(pwd)
                 .low_pwd(pwd)
@@ -113,6 +95,7 @@ public class MemberServiceTest {
                 .street(address.getStreet())
                 .role(Role.ADMIN)
                 .build());
+
         //then
         Member member = memberRepository.findById(id).get();
         assertThat(member.getEmail()).isEqualTo(email);
@@ -152,8 +135,8 @@ public class MemberServiceTest {
 
     /**
      * 예외처리 테스트
-     * 1. 중복 검사 -- 성공
      */
+    // 이메일 중복 검사 -- 성공
     @Test(expected = MemberDuplicationException.class)
     public void 이메일_중복검사(){
 
@@ -163,15 +146,22 @@ public class MemberServiceTest {
         memberServiceImpl.validateDuplicateMember(email);
     }
 
+    @Test(expected = PasswordMissmatchException.class)
+    public void 패스워드매칭() {
+        //given
+        String password = "12345";
 
+        //when
+        memberServiceImpl.passwordSameChk(password,"123");
+    }
 
     /**
-     * 회원 조회 오류
-     * 2. 조회 NPE -- 성공
+     * NPE
      */
     //https://jojoldu.tistory.com/226 참고
     //https://stackoverflow.com/questions/38881233/java-test-with-expected-exception-fails-with-assertion-error assertError 해결
-    @Test(expected = IllegalArgumentException.class)
+    // 회원 조회 NPE -- 성공
+    @Test(expected = UserNotFoundException.class)
     public void 조회NPE() throws Exception {
         //given
         Long id = 1L;
@@ -183,11 +173,9 @@ public class MemberServiceTest {
 
     }
 
-    /**
-     * 수정 NPE -- 성공
-     * @throws Exception
-     */
-    @Test(expected = IllegalArgumentException.class)
+
+    // 회원 수정 NPE -- 성공
+    @Test(expected = UserNotFoundException.class)
     public void 수정NPE() throws Exception {
 
         //given
@@ -204,7 +192,7 @@ public class MemberServiceTest {
      * 삭제 NPE -- 성공
      * @throws Exception
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = UserNotFoundException.class)
     public void 삭제NPE() throws Exception {
 
         //given

@@ -1,20 +1,22 @@
-
+#
 spring:
   datasource:
     url: jdbc:h2:mem:foodPro
+    data-username: sa
+    password: 1234
   jpa:
     show-sql: true
-    format-sql: true
-logging.level:
-  org.hibernate.SQL: info
-
+#
+#logging.level:
+#  org.hibernate.SQL: info
 #
 ##
-#  level:
-#    ROOT: INFO
-#    org.hibernate: DEBUG
-#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-#    org.springframework.orm: TRACE
-#    org.springframework.transaction: TRACE
-#    com.zaxxer.hikari: TRACE
-#    com.mysql.cj.jdbc: TRACE
+###
+##  level:
+##    ROOT: INFO
+##    org.hibernate: DEBUG
+##    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+##    org.springframework.orm: TRACE
+##    org.springframework.transaction: TRACE
+##    com.zaxxer.hikari: TRACE
+##    com.mysql.cj.jdbc: TRACE

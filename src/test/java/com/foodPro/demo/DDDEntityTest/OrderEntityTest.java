@@ -22,11 +22,9 @@ import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
-//import  org.springframework.test.util.AssertionErrors.assertEquals;
-
 @RunWith(SpringRunner.class)
-@DataJpaTest
-@Transactional
+@DataJpaTest // 트랜잭션 포함, 인메모리지원
+//@Transactional
 public class OrderEntityTest {
 
 
