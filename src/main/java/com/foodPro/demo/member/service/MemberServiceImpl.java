@@ -3,6 +3,7 @@ package com.foodPro.demo.member.service;
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.common.ApplicationService;
 import com.foodPro.demo.config.exception.MemberDuplicationException;
+import com.foodPro.demo.config.exception.PasswordMissmatchException;
 import com.foodPro.demo.config.exception.UserNotFoundException;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
@@ -28,13 +29,14 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
 
 
     private final MemberRepository memberRepository;
+
     /**
      * FUNCTION :: 회원가입
      * @param form
      * @return
      */
     @Override
-    public String SignUp(MemberDto.Request form) {
+    public Long SignUp(MemberDto.Request form) {
         HashMap<String, Object> rtnMap = returnMap();
         // LINE :: 패스워드 암호화
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -42,21 +44,18 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
         validateDuplicateMember(form.getEmail());
         // LINE :: 패스워드 일치검사
         passwordSameChk(form.getPwd(),form.getPwdChk());
-        // LINE :: 나이
-        int age = Integer.parseInt(form.getBirth().substring(0,4));
+
         // LINE :: 저장 + 유효성 검사
-        memberRepository.save(new MemberDto.Request().builder()
-                .name(form.getName())
+        Long id = memberRepository.save(new MemberDto.Request().builder()
                 .address(new Address(form.getCity(), form.getZipcode(), form.getStreet()))
-                .birth(form.getBirth())
                 .email(form.getEmail())
                 .low_pwd(form.getPwd())
                 .pwd(passwordEncoder.encode(form.getPwd()))
-                .phone(form.getPhone())
-                .age(Calendar.getInstance().get(Calendar.YEAR) - age)
-                .build().toEntity());
+                .build().toEntity()).getId();
         rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_SUCCESS); //성공
-        return "redirect:/login";
+
+
+        return id;
     }
 
     /**
@@ -64,11 +63,10 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
      * @param userEmail
      * @return
      */
-    @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) @Override
     public void validateDuplicateMember(String userEmail) {
-            if (memberRepository.findByEmail(userEmail).isPresent()) {
-                throw new MemberDuplicationException("회원 중복 오류");
+            if (!memberRepository.findByEmail(userEmail).isPresent()) {
+                throw new MemberDuplicationException("Duplicated ID");
         }
     }
 
@@ -76,12 +74,10 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
      * FUNCTION :: 패스워드 일치 검사
      * @return
      */
-    @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true)  @Override
     public void passwordSameChk(String pwd, String pwdChk) {
-        System.out.println("pwd +\"  ? \"+ pwdChk = " + pwd +"  ? "+ pwdChk);
-      if(pwd.equals(pwdChk)){
-          throw new IllegalArgumentException("패스워드 일치하지 않음");
+      if(!pwd.equals(pwdChk)){
+          throw new PasswordMissmatchException("Password Mismatch");
       }
     }
 
@@ -103,11 +99,8 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
      * @return
      */
     @Transactional(readOnly = true) @Override
-    public Page<MemberDto.Response> findAllDesc(Pageable pageable, int age) {
-            if(age == 0 ){
-                return memberRepository.findAll(pageable).map(MemberDto.Response::new);
-            }
-            return memberRepository.findAllDesc(pageable, age).map(MemberDto.Response::new);
+    public Page<MemberDto.Response> findAllDesc(Pageable pageable) {
+        return memberRepository.findAll(pageable).map(MemberDto.Response::new);
     }
 
     /**
@@ -116,9 +109,9 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
      * @return
      */
     @Transactional(readOnly = true) @Override
-    public MemberDto.Response findById(Long id) {
+    public MemberDto.Response findById(Long id)  {
         Member entity = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
+                .orElseThrow(() -> new UserNotFoundException());
 
         return new MemberDto.Response(entity);
     }
@@ -132,10 +125,16 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
     @Override
     public Long update(Long id, MemberDto.Request requestDto) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
-        member.update(requestDto.getCity(), requestDto.getStreet(), requestDto.getZipcode(), requestDto.getPhone());
+                .orElseThrow(() -> new UserNotFoundException());
+        member.update(requestDto.getCity(), requestDto.getStreet(), requestDto.getZipcode());
 
         return id;
     }
 
+    @Override
+    public void delete(Long id){
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException());
+        memberRepository.delete(member);
+    }
 }
