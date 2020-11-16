@@ -14,21 +14,18 @@ import java.util.Date;
 
 @RestController
 @ControllerAdvice
-public class GlobalExceptionHandler extends ApplicationService{
+public class GlobalExceptionHandler{
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-//    /**
-//     * FUNCTION :: Checked 오류
-//     * @param
-//     */
-//    @ExceptionHandler(Exception.class)
-//    public void globalException(Exception e) {
-//        log.info("Exception [" + e.getClass() + "] [" + e.getMessage() + "]");
-//        HashMap<String, Object> rtnMap = returnMap();
-//        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_FAIL);
-//    }
 
+    @ExceptionHandler(PasswordMissmatchException.class)
+    public ResponseEntity<Object> PasswordMissmatchException (PasswordMissmatchException ex, WebRequest request) {
+        log.info("[" + ex.getClass() + "] [" + ex.getMessage() + "]");
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.PasswordMisMatch.getCode()));
+    }
     /**
      * Handler :: UserNotFoundException Error :: 정보 조회 오류
      * @param ex
@@ -36,7 +33,7 @@ public class GlobalExceptionHandler extends ApplicationService{
      * @return
      */
     @ExceptionHandler(UserNotFoundException.class)
-    public final ResponseEntity<Object> handleAllExceptions(UserNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleAllExceptions(UserNotFoundException ex, WebRequest request) {
         log.info("[" + ex.getClass() + "] [" + ex.getMessage() + "]");
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
@@ -69,13 +66,12 @@ public class GlobalExceptionHandler extends ApplicationService{
         log.info("Exception Duplication [" + ex.getClass() + "] [" + ex.getMessage() + "]");
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST); //Body에 예외내용 담김.
-
-//        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.DuplicateIdFound.getCode()));
+//        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST); //Body에 예외내용 담김.
+        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.DuplicateIdFound.getCode()));
     }
 
     /**
-     * Handler :: Forbidden :: 권한 오류 -- 접근불가
+     * Handler :: Forbidden :: 권한 오류 접근불가
      * @param ex
      * @param request
      * @return

@@ -63,7 +63,8 @@ public class IndexController {
         if(result.hasErrors()){
             return "member/signup";
         }
-        return memberService.SignUp(request);
+        memberService.SignUp(request);
+        return "redirect:/login";
     }
 
     @GetMapping(value ="/accessDenied")
