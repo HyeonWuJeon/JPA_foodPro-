@@ -1,18 +1,14 @@
-package com.foodPro.demo.ApiTest;
+package com.foodPro.demo.Controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
-import com.foodPro.demo.member.service.MemberService;
-import com.foodPro.demo.member.service.MemberServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.web.server.LocalServerPort;

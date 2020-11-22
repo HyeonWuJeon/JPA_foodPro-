@@ -1,12 +1,8 @@
-package com.foodPro.demo.ApiTest;
+package com.foodPro.demo.Controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.exception.NotEnoughStockException;
-import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.item.dto.ItemDto;
 import com.foodPro.demo.item.service.ItemService;
-import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberServiceImpl;
 import com.foodPro.demo.order.domain.Order;
@@ -14,8 +10,6 @@ import com.foodPro.demo.order.domain.OrderStatus;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.repository.OrderRepository;
 import com.foodPro.demo.order.service.OrderService;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +18,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +28,6 @@ import javax.persistence.PersistenceContext;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
