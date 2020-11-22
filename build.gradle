@@ -1,7 +1,8 @@
 plugins {
 	id 'org.springframework.boot' version '2.3.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-	id 'java'
+	id 'java' // jar
+	id 'war' // war
 }
 
 group = 'com.foodPro'
@@ -12,6 +13,11 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+}
+
+bootWar{                        //bootWar Task시 이름 지정
+	archiveBaseName="springproject"
+	archiveVersion="0.0.1-SNAPSHOT"
 }
 
 repositories {
@@ -53,6 +59,13 @@ dependencies {
 
 	// weflux
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '1.2.5.RELEASE'
+	compile group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '9.0.37'
+//	// https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper
+//	compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '7.0.42'
+
+
 }
 
 test {
