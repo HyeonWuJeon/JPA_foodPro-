@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +39,10 @@ public class IndexController {
      * @return
      */
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(defaultValue = "false") Boolean error, Model model) {
+        if(error){
+            model.addAttribute("errorMessage", "아이디나 패스워드가 확인되지 않습니다.");
+        }
         return "member/signin";
     }
 

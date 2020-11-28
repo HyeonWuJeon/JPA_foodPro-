@@ -1,6 +1,7 @@
 package com.foodPro.demo.member.dto;
 
 import com.foodPro.demo.config.common.Address;
+import com.foodPro.demo.config.common.BaseTimeEntity;
 import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.member.domain.Member;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 
 @Getter
-public class MemberDto {
+public class MemberDto extends BaseTimeEntity {
 
     @Data
     //UNIT TEST 어노테이션
@@ -45,7 +46,6 @@ public class MemberDto {
 
         @Builder
         public Request( Role role, @Length(max = 200) @NotBlank(message = "패스워드를 확인해 주세요.:)") @Pattern(regexp = "[0-9]{5,10}", message = "5~10자리의 숫자만 입력가능합니다") String pwd, String low_pwd, @Length(max = 200) String pwdChk, @Length(max = 200) @NotBlank(message = "이메일을 확인해 주세요.:)") String email,  @NotBlank(message = "주소를 확인해 주세요") String city, @NotBlank(message = "주소를 확인해 주세요") String zipcode, @NotBlank(message = "주소를 확인해 주세요") String street, Address address) {
-//            this.id = id;
             this.pwd = pwd;
             this.low_pwd = low_pwd;
             this.pwdChk = pwdChk;
@@ -71,13 +71,14 @@ public class MemberDto {
 
     @Getter
     @ToString
-    public static class Response implements UserDetails {
+    public static class Response implements UserDetails, GrantedAuthority {
         private Long id;
         private String pwd; // LINE :: 패스워드
         private String email; // LINE :: 이메일
         private Address address; // LINE :: 주소
         private Role role; // LINE :: 권한
-
+        private String authority; // LINE :: 인증
+        private boolean enabled; // LINE :: USER 상태확인
         /**
          * CONSTRUCTOR :: 사용자 정보 조회
          * @param entity
@@ -90,7 +91,7 @@ public class MemberDto {
             this.role = entity.getRole();
         }
 
-        private Collection<? extends GrantedAuthority> authorities;
+        private Collection<? extends GrantedAuthority> authorities; // user 권한
 
         /**
          * CONSTRUCTOR :: 사용자 정보 인증
@@ -117,27 +118,30 @@ public class MemberDto {
 
         @Override
         public String getUsername() {
-            return this.getEmail();
+            return email;
         }
 
         @Override
         public boolean isAccountNonExpired() {
-            return true;
-        }
+            return enabled;
+        } // 계정이 만기되었는지 확인
 
         @Override
         public boolean isAccountNonLocked() {
-            return true;
-        }
+            return enabled;
+        } // 계정이 잠겨있는지 확인
 
         @Override
         public boolean isCredentialsNonExpired() {
-            return true;
-        }
+            return enabled;
+        } // 자격이 만기되었는지 확인
 
-        @Override
-        public boolean isEnabled() {
-            return true;
-        }
+//        @Override
+//        public boolean isEnabled() {
+//            return true;
+//        }
+
+
+
     }
 }

@@ -1,14 +1,15 @@
 package com.foodPro.demo.member.service;
 
 import com.foodPro.demo.config.common.Address;
-import com.foodPro.demo.config.common.ApplicationService;
 import com.foodPro.demo.config.exception.MemberDuplicationException;
 import com.foodPro.demo.config.exception.PasswordMissmatchException;
 import com.foodPro.demo.config.exception.UserNotFoundException;
+import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,14 +19,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 
 
 @Service("memberService")
 @RequiredArgsConstructor
-public class MemberServiceImpl extends ApplicationService implements UserDetailsService, MemberService {
+public class MemberServiceImpl implements UserDetailsService, MemberService {
+
 
 
     private final MemberRepository memberRepository;
@@ -37,7 +37,7 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
      */
     @Override
     public Long SignUp(MemberDto.Request form) {
-        HashMap<String, Object> rtnMap = returnMap();
+
         // LINE :: 패스워드 암호화
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // LINE :: 아이디 중복검사
@@ -52,9 +52,6 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
                 .low_pwd(form.getPwd())
                 .pwd(passwordEncoder.encode(form.getPwd()))
                 .build().toEntity()).getId();
-        rtnMap.put(AJAX_RESULT_TEXT, AJAX_RESULT_SUCCESS); //성공
-
-
         return id;
     }
 
@@ -65,8 +62,8 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
      */
     @Transactional(readOnly = true) @Override
     public void validateDuplicateMember(String userEmail) {
-            if (!memberRepository.findByEmail(userEmail).isPresent()) {
-                throw new MemberDuplicationException("Duplicated ID");
+        if(memberRepository.findByEmail(userEmail).isPresent()){ //null 이 아닐경우
+            throw new MemberDuplicationException("MemberDuplicationException :: FunctionName ==> validateDuplicateMember");
         }
     }
 
@@ -77,7 +74,7 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
     @Transactional(readOnly = true)  @Override
     public void passwordSameChk(String pwd, String pwdChk) {
       if(!pwd.equals(pwdChk)){
-          throw new PasswordMissmatchException("Password Mismatch");
+          throw new PasswordMissmatchException("PasswordMismatchException :: FunctionName ==> passwordSameChk");
       }
     }
 
@@ -93,6 +90,7 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
                 new MemberDto.Response(u, Collections.singleton(new SimpleGrantedAuthority(u.getRole().getValue())))).orElseThrow(()
                 -> new UserNotFoundException(userEmail));
     }
+
 
     /**
      * FUNCTION :: 회원 전체 조회
@@ -111,7 +109,7 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
     @Transactional(readOnly = true) @Override
     public MemberDto.Response findById(Long id)  {
         Member entity = memberRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(() -> new UserNotFoundException("UserNotFoundException :: FunctionName == > findById "));
 
         return new MemberDto.Response(entity);
     }
@@ -125,8 +123,17 @@ public class MemberServiceImpl extends ApplicationService implements UserDetails
     @Override
     public Long update(Long id, MemberDto.Request requestDto) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(() -> new UserNotFoundException("UserNotFoundException :: FunctionName == > update"));
         member.update(requestDto.getCity(), requestDto.getStreet(), requestDto.getZipcode());
+
+        return id;
+    }
+
+    @Override
+    public Long authorityUpdate(Long id, Role role) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException());
+        member.authorityUpdate(role);
 
         return id;
     }

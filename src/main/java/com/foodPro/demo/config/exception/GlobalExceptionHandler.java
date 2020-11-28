@@ -1,6 +1,5 @@
 package com.foodPro.demo.config.exception;
 
-import com.foodPro.demo.config.common.ApplicationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,13 +17,26 @@ public class GlobalExceptionHandler{
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Handler :: MemberDuplicationException :: 회원가입 이메일 중복 오류
+     * @param ex
+     * @return
+//     */
+    @ExceptionHandler(MemberDuplicationException.class)
+    public ResponseEntity DuplicationException(MemberDuplicationException ex, WebRequest request) {
+        log.info("Exception Duplication [" + ex.getClass() + "] [" + ex.getMessage() + "]");
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+//        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST); //Body에 예외내용 담김.
+        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.DuplicateIdFound.getCode())); // 이메일 중복 6000 code
+    }
 
     @ExceptionHandler(PasswordMissmatchException.class)
-    public ResponseEntity<Object> PasswordMissmatchException (PasswordMissmatchException ex, WebRequest request) {
+    public ResponseEntity PasswordMissmatchException (PasswordMissmatchException ex, WebRequest request) {
         log.info("[" + ex.getClass() + "] [" + ex.getMessage() + "]");
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.PasswordMisMatch.getCode()));
+        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.PasswordMisMatch.getCode())); // 6001 code
     }
     /**
      * Handler :: UserNotFoundException Error :: 정보 조회 오류
@@ -33,11 +45,11 @@ public class GlobalExceptionHandler{
      * @return
      */
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Object> handleAllExceptions(UserNotFoundException ex, WebRequest request) {
+    public ResponseEntity handleAllExceptions(UserNotFoundException ex, WebRequest request) {
         log.info("[" + ex.getClass() + "] [" + ex.getMessage() + "]");
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND); // 조회된 사용자 없음 404 code
     }
 
     /**
@@ -56,19 +68,7 @@ public class GlobalExceptionHandler{
 //    }
 
 
-    /**
-     * Handler :: MemberDuplicationException :: 회원가입 이메일 중복 오류
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(MemberDuplicationException.class)
-    public ResponseEntity<Object> DuplicationException(MemberDuplicationException ex, WebRequest request) {
-        log.info("Exception Duplication [" + ex.getClass() + "] [" + ex.getMessage() + "]");
-        ExceptionResponse exceptionResponse =
-                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-//        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST); //Body에 예외내용 담김.
-        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.DuplicateIdFound.getCode()));
-    }
+
 
     /**
      * Handler :: Forbidden :: 권한 오류 접근불가
@@ -76,11 +76,11 @@ public class GlobalExceptionHandler{
      * @param request
      * @return
      */
-    @ExceptionHandler(MemberDuplicationException.class)
-    public ResponseEntity<Object> ForbiddenException(MemberDuplicationException ex, WebRequest request) {
-        log.info("Exception Duplication [" + ex.getClass() + "] [" + ex.getMessage() + "]");
-        ExceptionResponse exceptionResponse =
-                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity(exceptionResponse, HttpStatus.UNAUTHORIZED);
-    }
+//    @ExceptionHandler(MemberDuplicationException.class)
+//    public ResponseEntity ForbiddenException(MemberDuplicationException ex, WebRequest request) {
+//        log.info("Exception Duplication [" + ex.getClass() + "] [" + ex.getMessage() + "]");
+//        ExceptionResponse exceptionResponse =
+//                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+//        return new ResponseEntity(exceptionResponse, HttpStatus.valueOf(LoginErrorCode.UnrecognizedRole.getCode())); // 6002 권한 오류
+//    }
 }

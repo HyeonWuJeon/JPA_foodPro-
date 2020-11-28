@@ -8,20 +8,20 @@
 <div class="container">
     <div>
         <form class action="/admin/list" method="get">
-        <div class="form-option">
-            <select name="age" id="age">
-                <option th:value="0" th:selected = "${age} == 0 ? 'selected':''" >모든회원 보기</option>
-                <option th:value="10" th:selected="${age} == 10" >10대</option>
-                <option th:value="20" th:selected="${age} == 20" >20대</option>
-                <option th:value="30" th:selected="${age} == 30" >30대</option>
-                <option th:value="40" th:selected="${age} == 40" >40대</option>
-                <option th:value="50" th:selected="${age} == 50" >50대</option>
-                <option th:value="60" th:selected="${age} == 60" >60대</option>
-            </select>
-            <button type="submit" class="login100-form-btn">
-                검색
-            </button>
-        </div>
+<!--        <div class="form-option">-->
+<!--            <select name="age" id="age">-->
+<!--                <option th:value="0" th:selected = "${age} == 0 ? 'selected':''" >모든회원 보기</option>-->
+<!--                <option th:value="10" th:selected="${age} == 10" >10대</option>-->
+<!--                <option th:value="20" th:selected="${age} == 20" >20대</option>-->
+<!--                <option th:value="30" th:selected="${age} == 30" >30대</option>-->
+<!--                <option th:value="40" th:selected="${age} == 40" >40대</option>-->
+<!--                <option th:value="50" th:selected="${age} == 50" >50대</option>-->
+<!--                <option th:value="60" th:selected="${age} == 60" >60대</option>-->
+<!--            </select>-->
+<!--            <button type="submit" class="login100-form-btn">-->
+<!--                검색-->
+<!--            </button>-->
+<!--        </div>-->
         </form>
         <table class="table table-striped">
             <thead class="thead-strong">
@@ -42,14 +42,11 @@
             <tbody id="tbody">
             <tr th:each="member : ${list}">
                 <td></td>
-                <td><a th:href="@{/admin/member/settings/{id}(id = ${member.id})}" th:text="${member.name}"></a></td>
+                <td><a th:href="@{/admin/member/settings/{id}(id = ${member.id})}" th:text="${member.email}"></a></td>
                 <td th:text="${member.email}"></td>
                 <td th:text="${member.address?.city}"></td>
                 <td th:text="${member.address?.street}"></td>
                 <td th:text="${member.address?.zipcode}"></td>
-                <td th:text="${member.phone}"></td>
-                <td th:text="${member.birth}"></td>
-                <td th:text="${member.age}"></td>
                 <td th:text="${member.role.toString()} == 'GUEST' ? '사용자' : '관리자'"></td>
             </tr>
             </tbody>

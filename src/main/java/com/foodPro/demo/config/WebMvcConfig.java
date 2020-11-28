@@ -3,13 +3,11 @@ package com.foodPro.demo.config;
 import com.foodPro.demo.config.filter.HeaderFilter;
 import com.foodPro.demo.config.interceptor.AuthInterceptor;
 import com.foodPro.demo.config.interceptor.JwtTokenInterceptor;
-import com.foodPro.demo.config.security.CustomAccessDeniedHandler;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -44,15 +42,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     /**
-     * CORS :: Vue.js 도메인 접근 허용
-     * @param registry
+     * 출처(URL의 프로토콜, 호스트, 포트)가 같은 localhost이므로 필요없음
+     * @return
      */
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8095");
-
-    }
+//    /**
+//     * CORS :: Vue.js 도메인 접근 허용
+//     * @param registry
+//     */
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("http://localhost:8095");
+//    }
 
 
     @Bean

@@ -17,7 +17,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         Authentication auth
                 = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(" 들어오는지확인 " );
         System.out.println("auth = " + auth);
         if (auth != null) {
             log.warn("User: " + auth.getName()

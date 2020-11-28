@@ -10,6 +10,8 @@ import lombok.*;
 @Getter
 public class ItemDto {
     @Data
+    @NoArgsConstructor
+
     public static class Request{
         private String gubun;
         private String name;
@@ -18,6 +20,17 @@ public class ItemDto {
         private String author;
         private String expirationDate;
         private String size;
+
+        @Builder
+        public Request(String gubun, String name, int price, int stockQuantity, String author, String expirationDate, String size) {
+            this.gubun = gubun;
+            this.name = name;
+            this.price = price;
+            this.stockQuantity = stockQuantity;
+            this.author = author;
+            this.expirationDate = expirationDate;
+            this.size = size;
+        }
 
         public Book Book_toEntity() {
             return Book.builder()

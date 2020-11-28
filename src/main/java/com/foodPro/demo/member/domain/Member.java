@@ -5,6 +5,7 @@ import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.order.domain.Order;
 import lombok.*;
+import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor()
 public class Member {
 
@@ -57,6 +57,13 @@ public class Member {
         this.address = new Address(city, zipcode, street);
         return this;
     }
+
+    public Member authorityUpdate(Role role){
+        this.role = role;
+        return this;
+    }
+
+//    public Member authority
 
 }
 
