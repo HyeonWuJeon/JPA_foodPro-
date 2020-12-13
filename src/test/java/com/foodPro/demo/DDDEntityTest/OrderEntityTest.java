@@ -10,19 +10,15 @@ import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderItem;
 import com.foodPro.demo.order.domain.OrderStatus;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 
-@RunWith(SpringRunner.class)
 @DataJpaTest // 트랜잭션 포함, 인메모리지원
 //@Transactional
 public class OrderEntityTest {
@@ -33,7 +29,7 @@ public class OrderEntityTest {
 
 
 
-    @Before
+    @BeforeAll
     public void common() {
 
         //given
