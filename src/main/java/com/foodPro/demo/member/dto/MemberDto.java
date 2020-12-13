@@ -56,6 +56,7 @@ public class MemberDto extends BaseTimeEntity {
             this.address =address;
             this.role =role;
 
+
         }
 
         public Member toEntity() {
@@ -65,6 +66,7 @@ public class MemberDto extends BaseTimeEntity {
                     .address(new Address(city, zipcode, street))
                     .role(Role.ADMIN)
                     .low_pwd(low_pwd)
+                    .enabled(true)
                     .build();
         }
     }
@@ -89,6 +91,7 @@ public class MemberDto extends BaseTimeEntity {
             this.pwd = entity.getPwd();
             this.address = entity.getAddress();
             this.role = entity.getRole();
+            this.enabled = entity.isEnabled();
         }
 
         private Collection<? extends GrantedAuthority> authorities; // user 권한

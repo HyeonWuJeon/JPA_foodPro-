@@ -9,7 +9,6 @@ import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +23,7 @@ import java.util.Collections;
 
 @Service("memberService")
 @RequiredArgsConstructor
+
 public class MemberServiceImpl implements UserDetailsService, MemberService {
 
 
@@ -62,9 +62,9 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
      */
     @Transactional(readOnly = true) @Override
     public void validateDuplicateMember(String userEmail) {
-        if(memberRepository.findByEmail(userEmail).isPresent()){ //null 이 아닐경우
+        memberRepository.findByEmail(userEmail).ifPresent(member -> {
             throw new MemberDuplicationException("MemberDuplicationException :: FunctionName ==> validateDuplicateMember");
-        }
+        });
     }
 
     /**
@@ -79,7 +79,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
     }
 
     /**
-     * FUNCTION :: 인증절차
+     * FUNCTION :: 인증절차 유저정보 조회
      * @param userEmail
      * @return
      * @throws UsernameNotFoundException
@@ -129,6 +129,12 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
         return id;
     }
 
+    /**
+     * FUNCTION :: 권한 수정
+     * @param id
+     * @param role
+     * @return
+     */
     @Override
     public Long authorityUpdate(Long id, Role role) {
         Member member = memberRepository.findById(id)
@@ -138,6 +144,10 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
         return id;
     }
 
+    /**
+     * FUNCTION :: 유저 삭제
+     * @param id
+     */
     @Override
     public void delete(Long id){
         Member member = memberRepository.findById(id)

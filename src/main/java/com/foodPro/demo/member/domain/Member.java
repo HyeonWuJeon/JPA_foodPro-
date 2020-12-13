@@ -5,15 +5,18 @@ import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.security.Role;
 import com.foodPro.demo.order.domain.Order;
 import lombok.*;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Indexed;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
-@NoArgsConstructor()
+@Setter
+@NoArgsConstructor() //접근레벨 Protected 로 변경
 public class Member {
 
     @Id
@@ -39,17 +42,23 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true) //LINE :: 주문목록 읽기전용 :: 회원정보가 삭제되면 order 정보도 같이 삭제된다.
     private List<Order> orderList = new ArrayList<>();
 
+    @Transient
+    private boolean enabled;
+
+
+
 
     /**
      * 회원 가입
      */
     @Builder
-    public Member( String email, Address address,String pwd,Role role,String low_pwd) {
+    public Member( String email, Address address,String pwd,Role role,String low_pwd, boolean enabled) {
         this.address = address;
         this.email = email;
         this.pwd = pwd;
         this.role = role;
         this.low_pwd = low_pwd;
+        this.enabled = enabled; // LINE :: USER 상태확인
     }
 
     // 비지니스 로직 :: 회원 정보 수정
