@@ -1,19 +1,15 @@
 package com.foodPro.demo.Security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foodPro.demo.config.security.SecurityMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -21,10 +17,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-//@WebMvcTest(controllers = {ItemController.class})
 public class UserAccessTest {
 
 
@@ -94,4 +89,6 @@ public class UserAccessTest {
         mockMvc.perform(get("/item/list"))
                 .andExpect(status().is3xxRedirection()); // login 페이지로 redirect
     }
+
+
 }

@@ -11,6 +11,7 @@ import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderItem;
 import com.foodPro.demo.order.domain.OrderStatus;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -29,8 +30,8 @@ public class OrderEntityTest {
 
 
 
-    @BeforeAll
-    public void common() {
+    @BeforeEach
+    void common() {
 
         //given
          String pwd = "123451111111111111111111111";
@@ -42,8 +43,6 @@ public class OrderEntityTest {
          int price = 10000;
          int stock = 22;
          String author = "히가시노게이고";
-        
-        Address address = new Address(city, zipcode, street);
 
         //when
         em.persist(MemberDto.Request.builder()
