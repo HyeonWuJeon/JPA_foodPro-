@@ -24,10 +24,12 @@ public class Address {
     protected Address(){
     }
 
-    public Address(String city, String zipcode, String street) {
-        this.city = city;
-        this.zipcode = zipcode;
-        this.street = street;
+    public static Address setAddress(String city, String zipcode, String street) {
+        Address address = new Address();
+        address.city = city;
+        address.zipcode = zipcode;
+        address.street = street;
+        return address;
     }
 
     @Override
