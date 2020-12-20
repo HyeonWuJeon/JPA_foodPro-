@@ -15,6 +15,8 @@
 ### TECH
 - Java 11 
 - SpringBoot 2.3.4
+- JPA
+- RDBMS H2, MYSQL
 
 ### SECURITY
 ``` 
