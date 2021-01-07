@@ -45,9 +45,6 @@ public class Member {
     @Transient
     private boolean enabled;
 
-
-
-
     /**
      * 회원 가입
      */

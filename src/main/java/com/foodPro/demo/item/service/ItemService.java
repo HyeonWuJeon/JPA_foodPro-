@@ -1,6 +1,7 @@
 package com.foodPro.demo.item.service;
 
 import com.foodPro.demo.item.domain.Item;
+import com.foodPro.demo.item.domain.item.Book;
 import com.foodPro.demo.item.dto.ItemDto;
 import com.foodPro.demo.item.repository.CatagoryRepository;
 import com.foodPro.demo.item.repository.ItemRepository;
@@ -27,11 +28,11 @@ public class ItemService {
     public void saveItem(ItemDto.Request request){
 
         switch (request.getGubun()){
-            case "Book": itemRepository.save(request.Book_toEntity()); // LINE :: 도서 저장
+            case "B": itemRepository.save(request.Book_toEntity()); // LINE :: 도서 저장
             break;
-            case "Food": itemRepository.save(request.Food_toEntity()); // LINE :: 음식 저장
+            case "F": itemRepository.save(request.Food_toEntity()); // LINE :: 음식 저장
             break;
-            case "Clothes": itemRepository.save(request.Clothes_toEntity()); // LINE :: 옷 저장
+            case "C": itemRepository.save(request.Clothes_toEntity()); // LINE :: 옷 저장
         }
 
     }
@@ -53,9 +54,21 @@ public class ItemService {
      */
     @Transactional(readOnly = true)
     public ItemDto.Response findById(Long id) {
-        Item entity = itemRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 회원이 없습니다. id=" + id));
-
+        Book entity = (Book) itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
         return new ItemDto.Response(entity);
+    }
+
+    /**
+     * FUNCTION :: 상품 수정 ==> dirty checking
+     * @param author
+     * @param name
+     * @param price
+     * @param stockQuantity
+     */
+    public void update(Long id, String author, String name, int price, int stockQuantity) {
+        Book entity = (Book) itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
+        entity.update(author,name,price,stockQuantity);
     }
 }

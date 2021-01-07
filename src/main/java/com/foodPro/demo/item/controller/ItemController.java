@@ -1,6 +1,7 @@
 package com.foodPro.demo.item.controller;
 
 import com.foodPro.demo.config.common.pagging.PageWrapper;
+import com.foodPro.demo.item.domain.Item;
 import com.foodPro.demo.item.dto.ItemDto;
 import com.foodPro.demo.item.service.ItemService;
 import com.foodPro.demo.member.dto.MemberDto;
@@ -10,10 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -47,6 +45,29 @@ public class ItemController {
             return "item/new";
         }
         itemService.saveItem(request);
+        return "redirect:/item/list";
+    }
+
+
+    @GetMapping(value = "/{itemId}/edit")
+    public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
+        ItemDto.Response item = itemService.findById(itemId);
+        model.addAttribute("form", item);
+        return "item/update";
+    }
+
+    /**
+     * FUNCTION :: 상품수정 ==> dirty checking
+     * @param itemId
+     * @param model
+     * @return
+     */
+    /**
+     * 상품 수정, 권장 코드
+     */
+    @PostMapping(value = "/{itemId}/edit")
+    public String updateItem(@ModelAttribute("form") ItemDto.Request form) {
+        itemService.update(form.getId(), form.getAuthor(), form.getName(), form.getPrice(), form.getStockQuantity());
         return "redirect:/item/list";
     }
 }

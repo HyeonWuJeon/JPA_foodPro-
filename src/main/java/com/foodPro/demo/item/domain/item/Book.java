@@ -13,13 +13,18 @@ import javax.persistence.Entity;
 public class Book extends Item {
     private String author;
 
-    protected Book(){
-        super();
+    public Book(){
     }
 
     @Builder
     public Book(String author, String name, int price, int stockQuantity) {
         super(name, price, stockQuantity);
         this.author = author;
+    }
+
+    public Book update(String author, String name, int price, int stockQuantity) {
+        super.update(name, price, stockQuantity);
+        this.author = author;
+        return this;
     }
 }

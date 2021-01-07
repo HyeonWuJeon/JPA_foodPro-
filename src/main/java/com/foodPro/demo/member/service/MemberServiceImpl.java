@@ -26,8 +26,6 @@ import java.util.Collections;
 
 public class MemberServiceImpl implements UserDetailsService, MemberService {
 
-
-
     private final MemberRepository memberRepository;
 
     /**
@@ -45,14 +43,11 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
         // LINE :: 패스워드 일치검사
         passwordSameChk(form.getPwd(),form.getPwdChk());
 
+        // LINE :: 주소등록
+        form.setAddress(form.getCity(), form.getStreet(),form.getZipcode());
+
         // LINE :: 저장 + 유효성 검사
-        Long id = memberRepository.save(new MemberDto.Request().builder()
-                .address(new Address(form.getCity(), form.getZipcode(), form.getStreet()))
-                .email(form.getEmail())
-                .low_pwd(form.getPwd())
-                .pwd(passwordEncoder.encode(form.getPwd()))
-                .build().toEntity()).getId();
-        return id;
+        return memberRepository.save(form.toEntity()).getId();
     }
 
     /**

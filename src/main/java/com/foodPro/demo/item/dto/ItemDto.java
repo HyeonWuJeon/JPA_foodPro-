@@ -13,6 +13,7 @@ public class ItemDto {
     @NoArgsConstructor
 
     public static class Request{
+        private Long id;
         private String gubun;
         private String name;
         private int price;
@@ -66,12 +67,23 @@ public class ItemDto {
         private String name;
         private int price;
         private int stockQuantity;
+        private String author;
+        private String expirationDate;
+        private String size;
 
-        public Response(Item entity){
+        public Response(Item entity) {
+            this.id = entity.getId();
+            this.name = entity.getName();
+            this.price = entity.getPrice();
+            this.stockQuantity = entity.getStockQuantity();
+        }
+
+        public Response(Book entity){
             this.id = entity.getId();
             this.name = entity.getName();
             this.price =entity.getPrice();
             this.stockQuantity=entity.getStockQuantity();
+            this.author = entity.getAuthor();
         }
     }
 }

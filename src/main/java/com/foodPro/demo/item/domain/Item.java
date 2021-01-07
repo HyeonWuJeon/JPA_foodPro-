@@ -30,6 +30,7 @@ public abstract class Item {
     private List<CatagoryItem> catalogueItemList = new ArrayList<>();
 
 
+
     public Item(String name, int price, int stockQuantity) {
         this.name = name;
         this.price = price;
@@ -39,6 +40,14 @@ public abstract class Item {
     public void addItemCatagory(CatagoryItem catagoryItem) {
         catalogueItemList.add(catagoryItem);
         catagoryItem.setItem(this);
+    }
+
+    // 상품수정
+    public Item update(String name, int price, int stockQuantity){
+        this.name = name;
+        this.price=price;
+        this.stockQuantity = stockQuantity;
+        return this;
     }
 
     // 비지니스 로직 :: 재고 수량 증가 (변수 변경)

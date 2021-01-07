@@ -27,14 +27,10 @@
             <thead class="thead-strong">
             <tr>
                 <th>번호</th>
-                <th>이름</th>
                 <th>이메일</th>
                 <th>도시</th>
                 <th>주소</th>
                 <th>우편번호</th>
-                <th>폰번호</th>
-                <th>생일</th>
-                <th>나이</th>
                 <th>구분</th>
             </tr>
             </thead>
@@ -42,7 +38,6 @@
             <tbody id="tbody">
             <tr th:each="member : ${list}">
                 <td></td>
-                <td><a th:href="@{/admin/member/settings/{id}(id = ${member.id})}" th:text="${member.email}"></a></td>
                 <td th:text="${member.email}"></td>
                 <td th:text="${member.address?.city}"></td>
                 <td th:text="${member.address?.street}"></td>
@@ -58,27 +53,26 @@
         <ul class='pagination pagination-centered'>
             <li th:class="${page.firstPage}?'disabled':''">
                 <span th:if='${page.firstPage}'>← First</span>
-<!--                여기넣으면될듯!-->
-                <a th:if='${not page.firstPage}' th:href='@{${page.url}(age =${age},page=0,size=${page.size})}'>← First</a>
+                <a th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>← First</a>
             </li>
             <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
                 <span th:if='${not page.hasPreviousPage}'>«</span>
-                <a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(age =${age},page=${page.number-2},size=${page.size})}'
+                <a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'
                    title='Go to previous page'>«</a>
             </li>
             <li th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">
                 <span th:if='${item.current}' th:text='${item.number}'>1</span>
-                <a th:if='${not item.current}' th:href='@{${page.url}(age =${age},page=${item.number-1},size=${page.size})}'><span
+                <a th:if='${not item.current}' th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span
                         th:text='${item.number}'>1</span></a>
             </li>
             <li th:class="${page.hasNextPage}? '' : 'disabled'">
                 <span th:if='${not page.hasNextPage}'>»</span>
-                <a th:if='${page.hasNextPage}' th:href='@{${page.url}(age =${age},page=${page.number},size=${page.size})}'
+                <a th:if='${page.hasNextPage}' th:href='@{${page.url}(page=${page.number},size=${page.size})}'
                    title='Go to next page'>»</a>
             </li>
             <li th:class="${page.lastPage}? 'disabled' : ''">
                 <span th:if='${page.lastPage}'>Last →</span>
-                <a th:if='${not page.lastPage}' th:href='@{${page.url}(age =${age},page=${page.totalPages - 1},size=${page.size})}'>Last
+                <a th:if='${not page.lastPage}' th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>Last
                     →</a>
             </li>
         </ul>
