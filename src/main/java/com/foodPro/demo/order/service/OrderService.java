@@ -60,7 +60,7 @@ public class OrderService {
     /**
      * FUNCTION :: 주문 취소
      */
-    public void cancleOrder(Long orderId){
+    public void cancelOrder(Long orderId){
         //주문 엔티티 조회
         Order order = orderRepository.findById(orderId).orElseThrow(()->new IllegalStateException("주문되지 않은 상품"));
         //주문 엔티티 취소
