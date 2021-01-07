@@ -1,4 +1,4 @@
-package com.foodPro.demo.Controller;
+package com.foodPro.demo.Order;
 
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.exception.NotEnoughStockException;

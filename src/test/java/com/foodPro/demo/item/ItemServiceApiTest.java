@@ -1,4 +1,4 @@
-package com.foodPro.demo.Controller;
+package com.foodPro.demo.item;
 
 import com.foodPro.demo.item.domain.item.Book;
 import com.foodPro.demo.item.dto.ItemDto;
