@@ -36,13 +36,15 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
     @Override
     public Long SignUp(MemberDto.Request form) {
 
-        // LINE :: 패스워드 암호화
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        // LINE :: 아이디 중복검사
-        validateDuplicateMember(form.getEmail());
         // LINE :: 패스워드 일치검사
         passwordSameChk(form.getPwd(),form.getPwdChk());
-
+        // LINE :: 패스워드 암호화
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        form.setPwd(passwordEncoder.encode(form.getPwd()));
+        // LINE :: 아이디 중복검사
+        validateDuplicateMember(form.getEmail());
+        // LINE :: 암호화 전 패스워드
+        form.setLow_pwd(form.getPwd());
         // LINE :: 주소등록
         form.setAddress(form.getCity(), form.getStreet(),form.getZipcode());
 
