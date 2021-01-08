@@ -5,19 +5,27 @@ import com.foodPro.demo.delivery.DeliveryStatus;
 import com.foodPro.demo.item.domain.Item;
 import com.foodPro.demo.item.repository.ItemRepository;
 import com.foodPro.demo.member.domain.Member;
+import com.foodPro.demo.member.domain.QMember;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
 import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderItem;
 import com.foodPro.demo.order.domain.OrderStatus;
+import com.foodPro.demo.order.domain.QOrder;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.repository.OrderRepository;
+import com.foodPro.demo.order.repository.OrderRepositorySearch;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +36,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
+    private final OrderRepositorySearch orderRepositorySearch;
 
     /**
      * FUNCTION :: 상품 주문
@@ -57,6 +66,7 @@ public class OrderService {
         orderRepository.save(order);
         return order.getId();
     }
+
     /**
      * FUNCTION :: 주문 취소
      */
@@ -68,15 +78,19 @@ public class OrderService {
     }
 
     /**
-     * FUNCTION :: 주문상품 전체조회
+     * FUNCTION :: 주문상품 전체조회 queryDsl 로 변경
      * @param status
      * @param email
      * @return
      */
+//    @Transactional(readOnly = true)
+//    public Page<OrderDto.Response> findAllDesc(OrderStatus status, String email,Pageable pageable) {
+//        return orderRepository.OrderSearch(status, email,pageable).map(OrderDto.Response::new); // 주문상태, 사용자 이메일
+//    }
+
     @Transactional(readOnly = true)
-    public Page<OrderDto.Response> findAllDesc(OrderStatus status, String email,Pageable pageable) {
-        //페이징 적용하기, 검색정보
-        return orderRepository.OrderSearch(status, email,pageable).map(OrderDto.Response::new); // 주문상태, 사용자 이메일
+    public List<Order> findAllDesc(OrderDto.OrderSearch orderSearch) {
+        return orderRepositorySearch.findAll(orderSearch);
     }
 
     /**
@@ -88,5 +102,4 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("조회된 주문내역이 없습니다. id=" + id));
         return new OrderDto.Response(entity);
     }
-
 }

@@ -80,7 +80,8 @@ public class OrderController {
     @GetMapping(value = "/list")
     public String orderList(@ModelAttribute("orderSearch") OrderDto.OrderSearch
                                     orderSearch, Model model, Pageable pageable) {
-        Page<OrderDto.Response> orders = orderService.findAllDesc(orderSearch.getOrderStatus(), orderSearch.getMemberEmail(), pageable);
+//        Page<OrderDto.Response> orders = orderService.findAllDesc(orderSearch.getOrderStatus(), orderSearch.getMemberEmail(), pageable);
+        List<Order> orders = orderService.findAllDesc(orderSearch); // QueryDsl
         model.addAttribute("orders", orders);
         return "order/orderList";
     }
@@ -94,5 +95,6 @@ public class OrderController {
     public String cancelOrder(@PathVariable("orderId") Long orderId) {
         orderService.cancelOrder(orderId);
         return "redirect:/orders/list";
+
     }
 }

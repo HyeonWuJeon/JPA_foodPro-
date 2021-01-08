@@ -1,9 +1,16 @@
+buildscript{
+	dependencies{
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+	}
+}
 plugins {
 	id 'org.springframework.boot' version '2.3.4.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java' // jar
 	id 'war' // war
 }
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 group = 'com.foodPro'
 version = '0.0.1-SNAPSHOT'
@@ -61,15 +68,33 @@ dependencies {
 
 	// weflux
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
-
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '1.2.5.RELEASE'
-	compile group: 'org.apache.tomcat', name: 'tomcat-jdbc', version: '9.0.37'
-//	// https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper
-//	compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '7.0.42'
-
+	implementation 'com.querydsl:querydsl-jpa'
+	implementation 'com.querydsl:querydsl-apt'
 
 }
 
 test {
 	useJUnitPlatform()
+}
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslDir]
+		}
+	}
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
 }
