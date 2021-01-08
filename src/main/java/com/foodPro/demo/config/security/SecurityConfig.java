@@ -53,9 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // LINE :: 페이지 권한 설정
                 .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name()) // 관리자만 요청을 보낼 수 있다.
                 .antMatchers("/admin/**").hasRole(Role.ADMIN.name()) // 관리자만 접근이 가능하다.
-                .antMatchers("/item/list").authenticated() // 아이템 정보를 보기위해서는 인증과정을 거쳐야 한다.
-                .antMatchers("/item/new").authenticated() // 아이템을 등록하기 위해서는 인증과정을 거져야 한다.
-
+                .antMatchers("/item/list","/item/new","/orders/list","/orders").authenticated() // 인증과정을 거쳐야 접근이 가능하다.
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
