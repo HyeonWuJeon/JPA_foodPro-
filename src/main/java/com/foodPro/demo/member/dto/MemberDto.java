@@ -48,7 +48,7 @@ public class MemberDto extends BaseTimeEntity {
         }
 
         @Builder
-        public Request( Role role, @Length(max = 200) @NotBlank(message = "패스워드를 확인해 주세요.:)") @Pattern(regexp = "[0-9]{5,10}", message = "5~10자리의 숫자만 입력가능합니다") String pwd, String low_pwd, @Length(max = 200) String pwdChk, @Length(max = 200) @NotBlank(message = "이메일을 확인해 주세요.:)") String email,  @NotBlank(message = "주소를 확인해 주세요") String city, @NotBlank(message = "주소를 확인해 주세요") String zipcode, @NotBlank(message = "주소를 확인해 주세요") String street, Address address) {
+        public Request(Role role, @Length(max = 200) @NotBlank(message = "패스워드를 확인해 주세요.:)") @Pattern(regexp = "[0-9]{5,10}", message = "5~10자리의 숫자만 입력가능합니다") String pwd, String low_pwd, @Length(max = 200) String pwdChk, @Length(max = 200) @NotBlank(message = "이메일을 확인해 주세요.:)") String email,  @NotBlank(message = "주소를 확인해 주세요") String city, @NotBlank(message = "주소를 확인해 주세요") String zipcode, @NotBlank(message = "주소를 확인해 주세요") String street, Address address) {
             this.pwd = pwd;
             this.low_pwd = low_pwd;
             this.pwdChk = pwdChk;

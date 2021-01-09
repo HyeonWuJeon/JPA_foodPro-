@@ -2,10 +2,11 @@ package com.foodPro.demo.order.dto;
 
 import com.foodPro.demo.delivery.Delivery;
 import com.foodPro.demo.member.domain.Member;
-import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderItem;
 import com.foodPro.demo.order.domain.OrderStatus;
-import lombok.*;
+import com.foodPro.demo.order.domain.Orders;
+import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class OrderDto {
         private Delivery delivery;
         private OrderStatus orderStatus;
 
-        public Response(Order entity){
+        public Response(Orders entity){
             this.id = entity.getId();
             this.member = entity.getMember();
             this.delivery = entity.getDelivery();

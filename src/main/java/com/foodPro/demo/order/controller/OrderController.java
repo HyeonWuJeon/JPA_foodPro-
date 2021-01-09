@@ -1,14 +1,10 @@
 package com.foodPro.demo.order.controller;
 
-import com.foodPro.demo.config.common.pagging.PageWrapper;
-import com.foodPro.demo.item.domain.Item;
 import com.foodPro.demo.item.dto.ItemDto;
 import com.foodPro.demo.item.service.ItemService;
-import com.foodPro.demo.member.domain.Member;
 import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.service.MemberService;
-import com.foodPro.demo.order.domain.Order;
-import com.foodPro.demo.order.domain.OrderStatus;
+import com.foodPro.demo.order.domain.Orders;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -28,19 +24,6 @@ public class OrderController {
     private final OrderService orderService;
     private final MemberService memberService;
     private final ItemService itemService;
-
-//    @GetMapping("/list")
-//    public String findAllDesc(OrderStatus status, String email, Model model, Pageable pageable) {
-//
-//
-//        Page<OrderDto.Response> responses = orderService.findAllDesc(status, email, pageable);
-//        PageWrapper<OrderDto.Response> page = new PageWrapper<>(responses, "/order/list");
-//
-//        model.addAttribute("page", page);
-//        model.addAttribute("list", responses);
-//
-//        return "member/list";
-//    }
 
     /**
      * FUNCTION :: 주문 페이지
@@ -81,7 +64,7 @@ public class OrderController {
     public String orderList(@ModelAttribute("orderSearch") OrderDto.OrderSearch
                                     orderSearch, Model model, Pageable pageable) {
 //        Page<OrderDto.Response> orders = orderService.findAllDesc(orderSearch.getOrderStatus(), orderSearch.getMemberEmail(), pageable);
-        List<Order> orders = orderService.findAllDesc(orderSearch); // QueryDsl
+        List<Orders> orders = orderService.findAllDesc(orderSearch); // QueryDsl
         model.addAttribute("orders", orders);
         return "order/orderList";
     }

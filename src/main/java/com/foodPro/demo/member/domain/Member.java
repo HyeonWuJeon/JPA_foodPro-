@@ -3,15 +3,15 @@ package com.foodPro.demo.member.domain;
 
 import com.foodPro.demo.config.common.Address;
 import com.foodPro.demo.config.security.Role;
-import com.foodPro.demo.order.domain.Order;
-import lombok.*;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Indexed;
+import com.foodPro.demo.order.domain.Orders;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -40,7 +40,7 @@ public class Member {
     private Address address; // LINE :: 주소
 
     @OneToMany(mappedBy = "member", orphanRemoval = true) //LINE :: 주문목록 읽기전용 :: 회원정보가 삭제되면 order 정보도 같이 삭제된다.
-    private List<Order> orderList = new ArrayList<>();
+    private List<Orders> orderList = new ArrayList<>();
 
     @Transient
     private boolean enabled;
@@ -49,7 +49,7 @@ public class Member {
      * 회원 가입
      */
     @Builder
-    public Member( String email, Address address,String pwd,Role role,String low_pwd, boolean enabled) {
+    public Member(String email, Address address,String pwd,Role role,String low_pwd, boolean enabled) {
         this.address = address;
         this.email = email;
         this.pwd = pwd;

@@ -28,12 +28,12 @@ public class OrderItem extends BaseTimeEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
-    private Order order; //LINE :: 주문 외래키
+    private Orders order; //LINE :: 주문 외래키
 
     private int orderPrice; // LINE :: 주문가격
     private int count; // LINE :: 주문수량
 
-    public void setOrder(Order order) {
+    public void setOrder(Orders order) {
         this.order = order;
     }
 

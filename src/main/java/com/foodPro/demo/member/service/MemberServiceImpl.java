@@ -106,7 +106,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
     @Transactional(readOnly = true) @Override
     public MemberDto.Response findById(Long id)  {
         Member entity = memberRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("UserNotFoundException :: FunctionName == > findById "));
+                .orElseThrow(() -> new UserNotFoundException("UserNotFoundException :: FunctionName == > findById"));
 
         return new MemberDto.Response(entity);
     }
@@ -135,7 +135,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
     @Override
     public Long authorityUpdate(Long id, Role role) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(() -> new UserNotFoundException("UserNotFoundException :: FunctionName == > authorityUpdate"));
         member.authorityUpdate(role);
 
         return id;
@@ -148,7 +148,7 @@ public class MemberServiceImpl implements UserDetailsService, MemberService {
     @Override
     public void delete(Long id){
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(() -> new UserNotFoundException("UserNotFoundException :: FunctionName == > delete"));
         memberRepository.delete(member);
     }
 }

@@ -5,29 +5,17 @@ import com.foodPro.demo.delivery.DeliveryStatus;
 import com.foodPro.demo.item.domain.Item;
 import com.foodPro.demo.item.repository.ItemRepository;
 import com.foodPro.demo.member.domain.Member;
-import com.foodPro.demo.member.domain.QMember;
-import com.foodPro.demo.member.dto.MemberDto;
 import com.foodPro.demo.member.repository.MemberRepository;
-import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderItem;
-import com.foodPro.demo.order.domain.OrderStatus;
-import com.foodPro.demo.order.domain.QOrder;
+import com.foodPro.demo.order.domain.Orders;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.foodPro.demo.order.repository.OrderRepository;
 import com.foodPro.demo.order.repository.OrderRepositorySearch;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +48,7 @@ public class OrderService {
         // LINE :: 주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
         // LINE :: 주문 생성
-        Order order = Order.createOrder(member, delivery, orderItem);
+        Orders order = Orders.createOrder(member, delivery, orderItem);
 
         //주문 저장
         orderRepository.save(order);
@@ -72,7 +60,7 @@ public class OrderService {
      */
     public void cancelOrder(Long orderId){
         //주문 엔티티 조회
-        Order order = orderRepository.findById(orderId).orElseThrow(()->new IllegalStateException("주문되지 않은 상품"));
+        Orders order = orderRepository.findById(orderId).orElseThrow(()->new IllegalStateException("주문되지 않은 상품"));
         //주문 엔티티 취소
         order.cancle();
     }
@@ -89,7 +77,7 @@ public class OrderService {
 //    }
 
     @Transactional(readOnly = true)
-    public List<Order> findAllDesc(OrderDto.OrderSearch orderSearch) {
+    public List<Orders> findAllDesc(OrderDto.OrderSearch orderSearch) {
         return orderRepositorySearch.findAll(orderSearch);
     }
 
@@ -98,7 +86,7 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public OrderDto.Response findById(Long id) {
-        Order entity = orderRepository.findById(id)
+        Orders entity = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("조회된 주문내역이 없습니다. id=" + id));
         return new OrderDto.Response(entity);
     }

@@ -1,12 +1,12 @@
 package com.foodPro.demo.delivery;
 
 import com.foodPro.demo.config.common.Address;
-import com.foodPro.demo.order.domain.Order;
+import com.foodPro.demo.order.domain.Orders;
 import lombok.Getter;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -17,7 +17,7 @@ public class Delivery {
     private Long id;
 
     @OneToOne(mappedBy = "delivery", fetch=LAZY)
-    private Order order;
+    private Orders order;
 
     @Embedded
     private Address address; //LINE :: 주소지
@@ -26,7 +26,7 @@ public class Delivery {
     private DeliveryStatus deliveryStatus; //LINE :: 주문 상태 READY , COMP
 
 
-    public void setOrder(Order order){
+    public void setOrder(Orders order){
         this.order = order;
     }
 

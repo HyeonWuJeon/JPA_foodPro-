@@ -1,9 +1,9 @@
 package com.foodPro.demo.order.repository;
 
 import com.foodPro.demo.member.domain.QMember;
-import com.foodPro.demo.order.domain.Order;
 import com.foodPro.demo.order.domain.OrderStatus;
-import com.foodPro.demo.order.domain.QOrder;
+import com.foodPro.demo.order.domain.Orders;
+import com.foodPro.demo.order.domain.QOrders;
 import com.foodPro.demo.order.dto.OrderDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,10 +24,10 @@ public class OrderRepositorySearch {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Order> findAll(OrderDto.OrderSearch orderSearch){
+    public List<Orders> findAll(OrderDto.OrderSearch orderSearch){
 
         // 변수 선언 ( static import 가능하다 )
-        QOrder order = QOrder.order;
+        QOrders order = QOrders.orders;
         QMember member = QMember.member;
 
         return query
@@ -63,6 +63,6 @@ public class OrderRepositorySearch {
         if(statusCond == null){
             return null; // where 문을 실행하지 않는다.
         }
-        return QOrder.order.orderStatus.eq(statusCond);
+        return QOrders.orders.orderStatus.eq(statusCond);
     }
 }

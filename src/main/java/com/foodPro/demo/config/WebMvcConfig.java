@@ -45,10 +45,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
      * 출처(URL의 프로토콜, 호스트, 포트)가 같은 localhost이므로 필요없음
      * @return
      */
-//    /**
-//     * CORS :: Vue.js 도메인 접근 허용
-//     * @param registry
-//     */
+    /**
+     * CORS :: Vue.js 도메인 접근 허용
+     * @param registry
+     */
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
 //        registry.addMapping("/**")

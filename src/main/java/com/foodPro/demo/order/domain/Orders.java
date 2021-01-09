@@ -21,7 +21,7 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 외부에서 인스턴스를 생성해서 접근 못하도록 막아준다.
-public class Order extends BaseTimeEntity {
+public class Orders extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "order_id")
@@ -66,8 +66,8 @@ public class Order extends BaseTimeEntity {
     }
 
     // DDD :: 생성 시점부터 주문 생성
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
-        Order order = new Order();
+    public static Orders createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Orders order = new Orders();
         order.setMember(member); // LINE :: 주문한 회원
         order.setDelivery(delivery); // LINE :: 배송 정보
         for (OrderItem orderItem: orderItems){
