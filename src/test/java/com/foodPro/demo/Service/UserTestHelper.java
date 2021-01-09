@@ -28,7 +28,7 @@ public class UserTestHelper {
                 .zipcode("광진구")
                 .street("중곡동")
                 .role(Role.GUEST)
-                .enabled(true)
+//                .enabled(true)
                 .build());
     }
     public void assertUser(Member member, String email){
@@ -39,13 +39,5 @@ public class UserTestHelper {
         assertEquals(member.getAddress().getCity(),"서울시");
         assertTrue(member.isEnabled());
     }
-
-
-    //권한 체크
-//    public void assertUser(Member member, String email,  String... authorities){
-//        assertUser(member, email);
-//        assertTrue(member.getRole());
-//        assertTrue(member.getRole().containsAll(Stream.of(authorities).map(auth->new Authority(auth))));
-//    }
 
 }

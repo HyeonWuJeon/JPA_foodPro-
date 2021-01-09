@@ -49,7 +49,6 @@ public class MemberServiceTest {
     static String street = "용마산로";
 
 
-
     /**
      * 1. 저장
      */
@@ -57,7 +56,7 @@ public class MemberServiceTest {
     @Order(1)
     void save() {
         //given
-        Address address = Address.setAddress(city, zipcode, street);
+        Address address = new Address(city, zipcode, street);
         //when
         Long id = memberServiceImpl.SignUp(MemberDto.Request.builder()
                 .pwd(pwd)
@@ -72,8 +71,8 @@ public class MemberServiceTest {
 
         //then
         Member member = memberRepository.findById(id).get();
-        assertEquals(member.getEmail(),email,() ->"email 값이 불일치합니다.");
-        assertEquals(member.getAddress().getCity(),city);
+        assertEquals(member.getEmail(), email, () -> "email 값이 불일치합니다.");
+        assertEquals(member.getAddress().getCity(), city);
 
     }
 
@@ -91,8 +90,8 @@ public class MemberServiceTest {
         for (MemberDto.Response member : List) {
             System.out.println("member.toString() = " + member.toString());
         }
-        assertEquals(List.getTotalElements(),1);
-        assertEquals(List.getContent().get(0).getEmail(),email);
+        assertEquals(List.getTotalElements(), 1);
+        assertEquals(List.getContent().get(0).getEmail(), email);
     }
 
     /**
@@ -102,7 +101,7 @@ public class MemberServiceTest {
     @Order(3)
     void modify() {
         //given
-        Address address = Address.setAddress("경기도", "광명", "00동");
+        Address address = new Address("경기도", "광명", "00동");
         //when
         memberServiceImpl.update(1L, MemberDto.Request.builder()
                 .city(address.getCity())
@@ -112,7 +111,7 @@ public class MemberServiceTest {
 
         //then
         Member member = memberRepository.findById(1L).get();
-        assertEquals(member.getAddress().getCity(),"경기도");
+        assertEquals(member.getAddress().getCity(), "경기도");
 
     }
 
@@ -125,7 +124,7 @@ public class MemberServiceTest {
         memberServiceImpl.delete(1L);
 
 
-        Exception exception = assertThrows(UserNotFoundException.class, () ->memberServiceImpl.findById(1L));
+        Exception exception = assertThrows(UserNotFoundException.class, () -> memberServiceImpl.findById(1L));
         //then
         assertEquals("UserNotFoundException :: FunctionName == > findById", exception.getMessage());
 
@@ -135,7 +134,6 @@ public class MemberServiceTest {
     /**
      * 예외처리 테스트
      */
-// 이메일 중복 검사 -- 성공
     @Nested
     @SpringBootTest
     @DisplayName("user 예외처리 테스트")
@@ -151,11 +149,9 @@ public class MemberServiceTest {
         MemberRepository memberRepository;
 
         @Test
-        @DisplayName("1.이메일 중복검사") @Order(1)
+        @DisplayName("1.이메일 중복검사")
+        @Order(1)
         void email() {
-
-//            Optional<Member> member = memberRepository.findById(1L);
-//            System.out.println("member.get().getEmail() !!!!= " + member.get().getEmail());
             Optional<Member> member = Optional.of(new Member());
             given(memberRepository.findByEmail(email)).willReturn(member);
 
@@ -166,7 +162,8 @@ public class MemberServiceTest {
         }
 
         @Test
-        @DisplayName("2. 패스워드 매칭 검사") @Order(2)
+        @DisplayName("2. 패스워드 매칭 검사")
+        @Order(2)
         void password() {
             //given
             String password = "12345";
@@ -195,7 +192,7 @@ public class MemberServiceTest {
             //when
             Exception exception = assertThrows(UserNotFoundException.class, () -> memberServiceImpl.findById(id));
             //then
-            assertEquals("UserNotFoundException :: FunctionName == > findById NotFoundException", exception.getMessage(), () -> "예외처리");
+            assertEquals("UserNotFoundException :: FunctionName == > findById", exception.getMessage(), () -> "예외처리");
         }
 
         // 회원 수정 NPE -- 성공
@@ -212,7 +209,7 @@ public class MemberServiceTest {
             //when
             Exception exception = assertThrows(UserNotFoundException.class, () -> memberServiceImpl.update(id, MemberDto.Request.builder().email(email).build()));
             //then
-            assertEquals("UserNotFoundException :: FunctionName == > update NotFoundException", exception.getMessage(), () -> "예외처리");
+            assertEquals("UserNotFoundException :: FunctionName == > update", exception.getMessage(), () -> "예외처리");
 
         }
 
@@ -230,7 +227,7 @@ public class MemberServiceTest {
             //when
             Exception exception = assertThrows(UserNotFoundException.class, () -> memberServiceImpl.delete(id));
             //then
-            assertEquals("NotFoundException", exception.getMessage(), () -> "예외처리");
+            assertEquals("UserNotFoundException :: FunctionName == > delete", exception.getMessage(), () -> "예외처리");
         }
 
     }
